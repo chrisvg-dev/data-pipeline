@@ -2,23 +2,36 @@ package com.arkon.pipeline.v1.controller;
 
 import com.arkon.pipeline.v1.model.Record;
 import com.arkon.pipeline.v1.model.Template;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.arkon.pipeline.v1.services.DataServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @RestControllerAdvice
 @RequestMapping("/api/pipeline")
+@CrossOrigin(origins = "*")
 public class Pipeline {
+
+    @Autowired private DataServices dataServices;
 
     @GetMapping
     public List<Record> get() {
-        String URI = "https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e";
-        RestTemplate rt = new RestTemplate();
-        Template result = rt.getForObject(URI, Template.class);
-        return result.getResult().getRecords();
+        return this.dataServices.records();
+    }
+
+    @GetMapping("/recolectar")
+    public String recolectar() {
+        Template template = this.dataServices.stream();
+        this.dataServices.persist(template);
+        return "Datos recolectados";
+    }
+
+    @GetMapping("/id/{id}/alcaldia/{alcaldia}")
+    public String agregarAlcaldia(@PathVariable Integer id, @PathVariable String alcaldia) {
+        System.out.println(alcaldia);
+        Record rec = this.dataServices.agregarAlcaldia(id, alcaldia);
+        return rec != null ? "Alcaldia agregada" : "Error";
     }
 }
