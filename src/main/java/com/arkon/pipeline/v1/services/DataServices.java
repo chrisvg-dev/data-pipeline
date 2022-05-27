@@ -7,6 +7,7 @@ import com.arkon.pipeline.v1.repository.InformationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -19,8 +20,10 @@ import java.util.stream.Collectors;
 @Transactional
 public class DataServices {
     public static final Logger log = LoggerFactory.getLogger(Data.class);
-
+    @Value("${api.url.cdmx}")
+    private String urlApiCDMX;
     @Autowired private InformationRepository recordRepository;
+    @Autowired private RestTemplate templateService;
 
     public List<Information> records(){
         return this.recordRepository.findAll();
@@ -40,11 +43,13 @@ public class DataServices {
 
     public void persist(Template template) {
         List<Information> registers = template.getResult().getRecords().stream()
-                .filter( record -> record.getPosition_latitude().doubleValue() > 0.0)
+                .filter( record ->
+                        record.getPosition_latitude().doubleValue() > 0.0 ||
+                        record.getPosition_longitude().doubleValue() > 0.0
+                )
                 .map( record -> {
                     Information info = new Information();
                     info.setIdVehiculo( record.getVehicle_id() );
-                    info.setUbicacion( record.getGeographic_point() );
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
                     info.setAlcaldia( null );
@@ -74,9 +79,7 @@ public class DataServices {
         /**
          * WARNING
          */
-        String URI = "https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=207";
-        RestTemplate rt = new RestTemplate();
-        return rt.getForObject(URI, Template.class);
+        return this.templateService.getForObject(this.urlApiCDMX, Template.class);
     }
 
     public Information agregarAlcaldia(AlcaldiaDto alcaldiaDto) {
