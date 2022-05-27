@@ -6,7 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-
+/**
+ * La clase Results apunta a la llave del JSON recibido donde se encuentran los registros, los cuales se representan
+ * en otra clase.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor

@@ -5,6 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+/**
+ * La clase Record representa toda la información importante de este análisis, en ella viene la información
+ * de los microbuses, la ubicación geográfica, el id de la unidad, entre otras.
+ *
+ * Esta clase se usa como DTO para posteriormente limpiar los datos y almacenarlos en la base de datos.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
