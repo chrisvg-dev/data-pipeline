@@ -1,11 +1,12 @@
 package com.arkon.pipeline.v1.controller;
 
-import com.arkon.pipeline.v1.model.Record;
-import com.arkon.pipeline.v1.model.Template;
+import com.arkon.pipeline.v1.dto.AlcaldiaDto;
+import com.arkon.pipeline.v1.dto.Record;
+import com.arkon.pipeline.v1.dto.Template;
+import com.arkon.pipeline.v1.model.Information;
 import com.arkon.pipeline.v1.services.DataServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,21 +18,39 @@ public class Pipeline {
     @Autowired private DataServices dataServices;
 
     @GetMapping
-    public List<Record> get() {
+    public List<Information> get() {
         return this.dataServices.records();
     }
 
-    @GetMapping("/recolectar")
-    public String recolectar() {
-        Template template = this.dataServices.stream();
-        this.dataServices.persist(template);
-        return "Datos recolectados";
+      @GetMapping("/alcaldias")
+    public List<AlcaldiaDto> alcaldiasDisponibles() {
+        return this.dataServices.alcaldiasDisponibles();
     }
 
-    @GetMapping("/id/{id}/alcaldia/{alcaldia}")
-    public String agregarAlcaldia(@PathVariable Integer id, @PathVariable String alcaldia) {
-        System.out.println(alcaldia);
-        Record rec = this.dataServices.agregarAlcaldia(id, alcaldia);
-        return rec != null ? "Alcaldia agregada" : "Error";
+    @GetMapping("/vehiculo/{id}")
+    public Information disponibles(@PathVariable Integer id) {
+        return this.dataServices.buscarPorId(id);
+    }
+
+    @GetMapping("/alcaldia/{alcaldia}")
+    public List<Information> disponibles(@PathVariable String alcaldia) {
+        return this.dataServices.findByAlcaldia( alcaldia );
+    }
+
+    @GetMapping("/recolectar")
+    public boolean recolectar() {
+        try {
+            Template template = this.dataServices.stream();
+            this.dataServices.persist(template);
+            return true;
+        }catch (Exception e)  {
+            return false;
+        }
+    }
+
+    @PutMapping
+    public boolean agregarAlcaldia(@RequestBody AlcaldiaDto alcaldia) {
+        Information rec = this.dataServices.agregarAlcaldia(alcaldia);
+        return rec != null;
     }
 }

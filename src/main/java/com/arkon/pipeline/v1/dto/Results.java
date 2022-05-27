@@ -1,4 +1,4 @@
-package com.arkon.pipeline.v1.model;
+package com.arkon.pipeline.v1.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
