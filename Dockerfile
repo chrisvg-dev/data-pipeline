@@ -1,5 +1,5 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
-WORKDIR /home/apps
-ARG JAR_FILE=target/v1-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+FROM adoptopenjdk:11-jre-hotspot
+MAINTAINER cristhianvg.com
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} demo-1.0.jar
+ENTRYPOINT ["java","-jar","demo-1.0.jar"]
