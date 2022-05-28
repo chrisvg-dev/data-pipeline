@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestControllerAdvice
 @RequestMapping("/api/pipeline")
@@ -25,13 +26,12 @@ public class Pipeline {
     }
 
     @GetMapping("/alcaldias")
-    public List<AlcaldiaDto> alcaldiasDisponibles() {
+    public Set<AlcaldiaDto> alcaldiasDisponibles() {
         return this.dataServices.alcaldiasDisponibles();
     }
 
     @GetMapping("/alcaldia/{alcaldia}")
     public List<Information> unidadesPorAlcaldia(@PathVariable String alcaldia) {
-        log.info(alcaldia);
         return this.dataServices.findByAlcaldia( alcaldia );
     }
     @GetMapping("/udisponibles")
@@ -51,6 +51,7 @@ public class Pipeline {
             this.dataServices.persist(template);
             return true;
         }catch (Exception e)  {
+            log.error( "Error a la hora de recolectar: " + e.getMessage() );
             return false;
         }
     }

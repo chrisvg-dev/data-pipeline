@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.xml.crypto.Data;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,15 +30,13 @@ public class DataServices {
         return this.recordRepository.findAll();
     }
 
-    public List<AlcaldiaDto> alcaldiasDisponibles(){
+    public Set<AlcaldiaDto> alcaldiasDisponibles(){
         return this.recordRepository.findAll().stream()
                 .map( information -> new AlcaldiaDto(null, information.getAlcaldia()))
-                .distinct()
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public List<Information> findByAlcaldia(String alcaldia){
-        log.info(alcaldia);
         return this.recordRepository.findByAlcaldia(alcaldia.toUpperCase()).orElse(null);
     }
 
