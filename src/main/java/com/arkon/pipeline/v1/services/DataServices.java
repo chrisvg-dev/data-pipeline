@@ -7,7 +7,6 @@ import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Information;
 import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
 import com.arkon.pipeline.v1.repository.InformationRepository;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,10 @@ public class DataServices {
     public static final Logger log = LoggerFactory.getLogger(Data.class);
     @Value("${api.url.cdmx}")
     private String urlApiCDMX;
+    @Value("${api.url.apiGoogle}")
+    private String urlGoogle;
+    @Value("${api.url.apiKey}")
+    private String apiKey;
     @Autowired private InformationRepository recordRepository;
     @Autowired private AlcaldiaRepository alcaldiaRepository;
     @Autowired private RestTemplate templateService;
@@ -82,12 +85,7 @@ public class DataServices {
     }
 
     public synchronized Alcaldia buscarAlcaldiaPorCoordenadas(Double lat, Double lng) {
-        return getAlcaldia(lat, lng, this.templateService, this.alcaldiaRepository, log);
-    }
-
-    @Nullable
-    public static Alcaldia getAlcaldia(Double lat, Double lng, RestTemplate templateService, AlcaldiaRepository alcaldiaRepository, Logger log) {
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&key=AIzaSyA0wl0GTeqSZQOnYkpG_OMYkmw9J8KEOwY";
+        String url = this.urlGoogle+"latlng="+lat+","+lng+"&key=" + this.apiKey;
         try {
             GoogleMaps gm = templateService.getForObject(
                     url,

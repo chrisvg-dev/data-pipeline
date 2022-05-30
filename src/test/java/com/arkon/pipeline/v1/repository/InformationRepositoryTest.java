@@ -16,12 +16,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class InformationRepositoryTest {
-    @Mock
-    private DataServices data;
     @Autowired
     private InformationRepository informationRepository;
     @Autowired

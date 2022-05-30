@@ -30,7 +30,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     @Autowired private AlcaldiaRepository alcaldiaRepository;
     @Autowired private RestTemplate templateService;
 
-        public List<Information> records(){
+    public List<Information> records(){
         return this.recordRepository.findAll();
     }
 
@@ -49,5 +49,4 @@ public class QueryResolver implements GraphQLQueryResolver {
         Alcaldia alc = this.alcaldiaRepository.findByName(alcaldia.toUpperCase()).orElse(null);
         return this.recordRepository.findByAlcaldia(alc).orElse(null);
     }
-
 }

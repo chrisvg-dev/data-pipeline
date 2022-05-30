@@ -1,6 +1,5 @@
 package com.arkon.pipeline.v1.repository;
 
-import com.arkon.pipeline.v1.dto.Record;
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Information;
 import org.springframework.data.jpa.repository.JpaRepository;
