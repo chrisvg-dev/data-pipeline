@@ -1,4 +1,4 @@
-package com.arkon.pipeline.v1.controller;
+package com.arkon.pipeline.v1.dto.controller;
 
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/graph")
 @CrossOrigin(origins = "*")
-public class GraphQlController {
-    public static final Logger log = LoggerFactory.getLogger(GraphQlController.class);
+public class GraphQLController {
+    public static final Logger log = LoggerFactory.getLogger(GraphQLController.class);
     private final GraphQL graphQL;
 
-    public GraphQlController(GraphQL graphQL) {
+    public GraphQLController(GraphQL graphQL) {
         this.graphQL = graphQL;
     }
 

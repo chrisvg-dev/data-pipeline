@@ -1,4 +1,4 @@
-package com.arkon.pipeline.v1.controller;
+package com.arkon.pipeline.v1.dto.controller;
 
 import com.arkon.pipeline.v1.dto.Template;
 import com.arkon.pipeline.v1.services.DataServices;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/pipeline")
 @CrossOrigin(origins = "*")
-public class Pipeline {
-    public static final Logger log = LoggerFactory.getLogger(Pipeline.class);
+public class DataController {
+    public static final Logger log = LoggerFactory.getLogger(DataController.class);
     private final DataServices dataServices;
 
-    public Pipeline(DataServices dataServices) {
+    public DataController(DataServices dataServices) {
         this.dataServices = dataServices;
     }
 
