@@ -1,7 +1,10 @@
 package com.arkon.pipeline.v1.services;
 
 import com.arkon.pipeline.v1.dto.AlcaldiaDto;
+import com.arkon.pipeline.v1.dto.maps.AddressComponent;
+import com.arkon.pipeline.v1.dto.maps.GoogleMaps;
 import com.arkon.pipeline.v1.dto.Template;
+import com.arkon.pipeline.v1.dto.maps.Results;
 import com.arkon.pipeline.v1.model.Information;
 import com.arkon.pipeline.v1.repository.InformationRepository;
 import org.slf4j.Logger;
@@ -51,7 +54,12 @@ public class DataServices {
                     info.setIdVehiculo( record.getVehicle_id() );
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
-                    info.setAlcaldia( null );
+                    info.setAlcaldia(
+                            this.buscarAlcaldiaPorCoordenadas(
+                                    record.getPosition_latitude().doubleValue(),
+                                    record.getPosition_longitude().doubleValue()
+                            )
+                    );
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
                     log.info( info.toString() );
                     return info;
@@ -79,6 +87,24 @@ public class DataServices {
          * WARNING
          */
         return this.templateService.getForObject(this.urlApiCDMX, Template.class);
+    }
+
+    public synchronized String buscarAlcaldiaPorCoordenadas(Double lat, Double lng) {
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&key=AIzaSyA0wl0GTeqSZQOnYkpG_OMYkmw9J8KEOwY";
+        try {
+            GoogleMaps gm = this.templateService.getForObject(
+                    url,
+                    GoogleMaps.class
+            );
+            int len = gm.getResults().size();
+
+            return gm.getResults().get(len-4).getAddress_components().get(0).getLong_name();
+        } catch (Exception e){
+            log.error( e.getMessage() );
+        } finally {
+            log.info(url);
+        }
+        return null;
     }
 
     public Information agregarAlcaldia(AlcaldiaDto alcaldiaDto) {

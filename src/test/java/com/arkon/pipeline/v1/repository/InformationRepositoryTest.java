@@ -1,18 +1,26 @@
 package com.arkon.pipeline.v1.repository;
 
 import com.arkon.pipeline.v1.model.Information;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class InformationRepositoryTest {
@@ -40,15 +48,8 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByIdVehicle_thenReturnsInformation(){
-        Information info = new Information();
-        info.setId(1);
-        info.setAlcaldia("AZCAPOTZALCO");
-        info.setIdVehiculo(170);
-        info.setStatusVehiculo(true);
-        info.setLatitud(12.000);
-        info.setLongitud(-99.000);
-        this.informationRepository.save(info);
-        Assertions.assertNotNull( this.informationRepository.findByIdVehiculo(170).orElse(null) );
+        Integer id = 170;
+        Assertions.assertNotNull( this.informationRepository.findByIdVehiculo(id).orElse(null) );
     }
 
     @Test
@@ -98,7 +99,7 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByAlcaldiaAndDoesntExist_thenIGetANull() {
-        List<Information> lista = this.informationRepository.findByAlcaldia("CUAUHTEMOC").get();
+        List<Information> lista = this.informationRepository.findByAlcaldia("CUAUHTEMOC BLANCO").get();
         assertTrue( lista.isEmpty() );
     }
 }
