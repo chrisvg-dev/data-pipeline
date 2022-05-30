@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Results {
-    private List<AddressComponent> address_components;
-    private String formatted_address;
+public class GooglePlusCode {
+    private String compound_code;
+    private String global_code;
 }

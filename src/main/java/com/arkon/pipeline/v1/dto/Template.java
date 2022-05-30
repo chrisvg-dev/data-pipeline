@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
  * Cada variable de esta clase representa la llave del json recibido, y tienen como único objetivo
  * representar la información.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

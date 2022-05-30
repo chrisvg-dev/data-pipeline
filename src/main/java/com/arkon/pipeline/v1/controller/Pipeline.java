@@ -1,17 +1,27 @@
 package com.arkon.pipeline.v1.controller;
 
 import com.arkon.pipeline.v1.dto.AlcaldiaDto;
-import com.arkon.pipeline.v1.dto.maps.AddressComponent;
-import com.arkon.pipeline.v1.dto.maps.GoogleMaps;
 import com.arkon.pipeline.v1.dto.Template;
-import com.arkon.pipeline.v1.dto.maps.Results;
 import com.arkon.pipeline.v1.model.Information;
 import com.arkon.pipeline.v1.services.DataServices;
+import graphql.GraphQL;
+import graphql.language.TypeDefinition;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLSchema;
+import graphql.schema.idl.RuntimeWiring;
+import graphql.schema.idl.SchemaGenerator;
+import graphql.schema.idl.SchemaParser;
+import graphql.schema.idl.TypeDefinitionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +32,31 @@ public class Pipeline {
     public static final Logger log = LoggerFactory.getLogger(Pipeline.class);
 
     @Autowired private DataServices dataServices;
+
+    @Value("classpath:schema.graphqls")
+    private Resource resource;
+
+    private GraphQL graphQL;
+
+    @PostConstruct
+    public void loadSchema() throws IOException {
+        File schemaFile = resource.getFile();
+        TypeDefinitionRegistry registry = new SchemaParser().parse(schemaFile);
+        RuntimeWiring wiring = buildWiring();
+        GraphQLSchema schema = new SchemaGenerator().makeExecutableSchema(registry, wiring);
+        graphQL = GraphQL.newGraphQL(schema).build();
+    }
+
+    private RuntimeWiring buildWiring() {
+        DataFetcher<List<Information>> fetcher1 = data -> {
+            return (List<Information>) dataServices.records();
+        };
+
+        return RuntimeWiring.newRuntimeWiring().type("Query",
+                        typeWriting -> typeWriting.dataFetcher("getAllPerson", fetcher1))
+                .build();
+
+    }
 
     @GetMapping
     public List<Information> get() {
@@ -57,16 +92,5 @@ public class Pipeline {
             log.error( "Error a la hora de recolectar: " + e.getMessage() );
             return false;
         }
-    }
-
-    @PutMapping
-    public boolean agregarAlcaldia(@RequestBody AlcaldiaDto alcaldia) {
-        Information rec = this.dataServices.agregarAlcaldia(alcaldia);
-        return rec != null;
-    }
-
-    @GetMapping("/buscarAlcaldia")
-    public String buscarAlcaldia() {
-        return this.dataServices.buscarAlcaldiaPorCoordenadas(19.3174991607666, -99.18779754638672);
     }
 }

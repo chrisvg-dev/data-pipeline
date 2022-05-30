@@ -1,6 +1,4 @@
 server:
-  servlet:
-    context-path: /pipeline
   port: 9090
 spring:
   datasource:
@@ -16,9 +14,14 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         ddl-auto: update
-    show-sql: true
     generate-ddl: true
 
+
+### GRAPHQL
+# Graphql
+graphql:
+  servlet:
+    mapping: /apis/graphql
 
 ### DATOS
 api:

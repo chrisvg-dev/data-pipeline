@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class GoogleMaps {
-    private PlusCode plus_code;
-    private List<Results> results;
+    private GooglePlusCode plus_code;
+    private List<GoogleResults> results;
     private String status;
 }

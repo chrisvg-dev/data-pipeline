@@ -3,6 +3,8 @@ package com.arkon.pipeline.v1.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * La clase Información es la forma final de representación de los datos, los cuales necesitan ser limpiados
  * para obtener la información necesaria para este proyecto.
@@ -16,11 +18,15 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Information {
+public class Information implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String alcaldia;
+    @ManyToOne
+    @JoinColumn(name = "alcaldiaId", referencedColumnName = "id")
+    private Alcaldia alcaldia;
     private Double latitud;
     private Double longitud;
     private Integer idVehiculo;

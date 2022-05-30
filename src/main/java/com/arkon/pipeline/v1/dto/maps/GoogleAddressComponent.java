@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlusCode {
-    private String compound_code;
-    private String global_code;
+public class GoogleAddressComponent {
+    private String long_name;
+    private String short_name;
+    private String types[];
 }
