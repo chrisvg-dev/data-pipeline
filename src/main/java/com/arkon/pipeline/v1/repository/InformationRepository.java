@@ -1,6 +1,7 @@
 package com.arkon.pipeline.v1.repository;
 
 import com.arkon.pipeline.v1.dto.Record;
+import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Information;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -39,5 +40,5 @@ public interface InformationRepository extends JpaRepository<Information, Intege
      * @param alcaldia
      * @return
      */
-    Optional<List<Information>> findByAlcaldia(String alcaldia);
+    Optional<List<Information>> findByAlcaldia(Alcaldia alcaldia);
 }

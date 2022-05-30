@@ -2,7 +2,9 @@ package com.arkon.pipeline.v1.controller;
 
 import com.arkon.pipeline.v1.dto.AlcaldiaDto;
 import com.arkon.pipeline.v1.dto.Template;
+import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Information;
+import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
 import com.arkon.pipeline.v1.services.DataServices;
 import graphql.GraphQL;
 import graphql.language.TypeDefinition;
@@ -32,31 +34,7 @@ public class Pipeline {
     public static final Logger log = LoggerFactory.getLogger(Pipeline.class);
 
     @Autowired private DataServices dataServices;
-
-    @Value("classpath:schema.graphqls")
-    private Resource resource;
-
-    private GraphQL graphQL;
-
-    @PostConstruct
-    public void loadSchema() throws IOException {
-        File schemaFile = resource.getFile();
-        TypeDefinitionRegistry registry = new SchemaParser().parse(schemaFile);
-        RuntimeWiring wiring = buildWiring();
-        GraphQLSchema schema = new SchemaGenerator().makeExecutableSchema(registry, wiring);
-        graphQL = GraphQL.newGraphQL(schema).build();
-    }
-
-    private RuntimeWiring buildWiring() {
-        DataFetcher<List<Information>> fetcher1 = data -> {
-            return (List<Information>) dataServices.records();
-        };
-
-        return RuntimeWiring.newRuntimeWiring().type("Query",
-                        typeWriting -> typeWriting.dataFetcher("getAllPerson", fetcher1))
-                .build();
-
-    }
+    @Autowired private AlcaldiaRepository alcaldiaRepository;
 
     @GetMapping
     public List<Information> get() {
@@ -68,18 +46,9 @@ public class Pipeline {
         return this.dataServices.alcaldiasDisponibles();
     }
 
-    @GetMapping("/alcaldia/{alcaldia}")
-    public List<Information> unidadesPorAlcaldia(@PathVariable String alcaldia) {
-        return this.dataServices.findByAlcaldia( alcaldia );
-    }
     @GetMapping("/udisponibles")
     public List<Information> unidadesDisponibles() {
         return this.dataServices.unidadesDisponibles();
-    }
-
-    @GetMapping("/vehiculo/{id}")
-    public Information ubicacionVehicle(@PathVariable Integer id) {
-        return this.dataServices.buscarPorId(id);
     }
 
     @GetMapping("/recolectar")

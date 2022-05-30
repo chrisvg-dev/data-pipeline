@@ -4,6 +4,10 @@ schema {
 
 type Query {
   records: [Information]
+  unidadesDisponibles: [Information]
+  alcaldiasDisponibles: [Alcaldia]
+  buscarPorId(idVehiculo: Int): Information
+  buscarPorAlcaldia(alcaldia: String): [Information]
 }
 
 type Alcaldia {

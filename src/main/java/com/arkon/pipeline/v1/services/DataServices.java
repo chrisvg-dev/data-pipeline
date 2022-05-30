@@ -41,10 +41,6 @@ public class DataServices {
                 .collect(Collectors.toSet());
     }
 
-    public List<Information> findByAlcaldia(String alcaldia){
-        return this.recordRepository.findByAlcaldia(alcaldia.toUpperCase()).orElse(null);
-    }
-
     public void persist(Template template) {
         List<Information> registers = template.getResult().getRecords().stream()
                 .filter( record ->
@@ -72,10 +68,6 @@ public class DataServices {
 
     public List<Information> unidadesDisponibles() {
         return this.recordRepository.findByStatusVehiculo(true).orElse(null);
-    }
-
-    public Information buscarPorId(Integer idVehiculo) {
-        return this.recordRepository.findByIdVehiculo(idVehiculo).orElse(null);
     }
 
     public Template stream() {
