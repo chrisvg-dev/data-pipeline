@@ -21,6 +21,7 @@ import reactor.core.scheduler.Schedulers;
 
 import javax.xml.crypto.Data;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +46,7 @@ public class DataServices {
     }
 
     public void persist(Template template) {
-        List<Information> data = template.getResult().getRecords().parallelStream()
+            List<Information> data = template.getResult().getRecords().parallelStream()
                 .filter( record ->
                         record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
                 )
@@ -54,18 +55,12 @@ public class DataServices {
                     info.setIdVehiculo( record.getVehicle_id() );
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
-                    try {
-                        info.setAlcaldia(
-                                this.buscarAlcaldiaPorCoordenadas( record.getPosition_latitude(), record.getPosition_longitude() ).get()
-                        );
-                    } catch (Exception e) {
-                        log.error(e.getMessage());
-                    }
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
-                    log.info("REGISTRO: " + info);
+                    Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(info.getLatitud(), info.getLongitud());
+                    info.setAlcaldia(alcaldia);
                     return info;
                 }).collect(Collectors.toList());
-        this.recordRepository.saveAll(data);
+            this.recordRepository.saveAll(data);
     }
 
     public Template stream() {
@@ -79,24 +74,27 @@ public class DataServices {
         return this.templateService.getForObject(this.urlApiCDMX, Template.class);
     }
 
-    public CompletableFuture<Alcaldia> buscarAlcaldiaPorCoordenadas(Double lat, Double lng) {
+    public Alcaldia buscarAlcaldiaPorCoordenadas(Double lat, Double lng) {
         String url = this.urlGoogle+"latlng="+lat+","+lng+"&key=" + this.apiKey;
         try {
             GoogleMaps gm = templateService.getForObject(
                     url,
                     GoogleMaps.class
             );
-            int len = !gm.getResults().isEmpty() ? gm.getResults().size() : 0;
-            String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name();
-            boolean exists = alcaldiaRepository.existsByName(name);
 
-            if (exists) return CompletableFuture.completedFuture(alcaldiaRepository.findByName(name).orElse(null));
-            Alcaldia newObject = new Alcaldia();
-            newObject.setName(name);
-            return CompletableFuture.completedFuture(alcaldiaRepository.save(newObject));
+            int len = gm.getResults().size();
+            String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name();
+
+            boolean exists = alcaldiaRepository.existsByName(name);
+            log.info(name + " and exist " + exists);
+            if (exists) return alcaldiaRepository.findByName(name).orElse(null);
+
+            Alcaldia alcaldia = new Alcaldia();
+            alcaldia.setName(name);
+            return alcaldiaRepository.save(alcaldia);
 
         } catch (Exception e){
-            log.error( e.getMessage() );
+            log.error("ERROR: "+  e.getLocalizedMessage() );
             return null;
         }
     }
