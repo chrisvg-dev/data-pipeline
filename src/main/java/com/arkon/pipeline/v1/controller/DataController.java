@@ -1,4 +1,4 @@
-package com.arkon.pipeline.v1.dto.controller;
+package com.arkon.pipeline.v1.controller;
 
 import com.arkon.pipeline.v1.dto.Template;
 import com.arkon.pipeline.v1.services.DataServices;
