@@ -46,7 +46,7 @@ public class DataServices {
     }
 
     public void persist(Template template) {
-            List<Information> data = template.getResult().getRecords().parallelStream()
+            List<Information> data = template.getResult().getRecords().stream()
                 .filter( record ->
                         record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
                 )
@@ -56,10 +56,15 @@ public class DataServices {
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
-                    Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(info.getLatitud(), info.getLongitud());
-                    info.setAlcaldia(alcaldia);
+                    info.setAlcaldia(null);
                     return info;
                 }).collect(Collectors.toList());
+            List<Information> modified = data.parallelStream().map(record -> {
+                Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(record.getLatitud(), record.getLongitud());
+                record.setAlcaldia(alcaldia);
+                log.info(alcaldia.toString());
+                return record;
+            }).collect(Collectors.toList());
             this.recordRepository.saveAll(data);
     }
 
@@ -86,7 +91,6 @@ public class DataServices {
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name();
 
             boolean exists = alcaldiaRepository.existsByName(name);
-            log.info(name + " and exist " + exists);
             if (exists) return alcaldiaRepository.findByName(name).orElse(null);
 
             Alcaldia alcaldia = new Alcaldia();

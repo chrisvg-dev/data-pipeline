@@ -5,13 +5,9 @@ spring:
     allow-bean-definition-overriding: true
     lazy-initialization: true
   datasource:
-    url: jdbc:mysql://localhost:3306/pipeline?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost:3306/pipeline?autoReconnect=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
     username: root
     password:
-
-  ## Hibernate Properties
-  # The SQL dialect makes Hibernate generate better SQL for the chosen database
-
   jpa:
     properties:
       hibernate:
@@ -33,4 +29,4 @@ api:
   url:
     apiKey: AIzaSyA0wl0GTeqSZQOnYkpG_OMYkmw9J8KEOwY
     apiGoogle: https://maps.googleapis.com/maps/api/geocode/json?
-    cdmx: https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=207
+    cdmx: https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=100
