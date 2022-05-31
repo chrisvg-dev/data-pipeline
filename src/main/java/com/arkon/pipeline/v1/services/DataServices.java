@@ -15,6 +15,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import javax.xml.crypto.Data;
 import java.util.List;
@@ -37,44 +40,31 @@ public class DataServices {
     @Autowired private AlcaldiaRepository alcaldiaRepository;
     @Autowired private RestTemplate templateService;
 
-    public List<Information> records(){
+    public List<Information> record(){
         return this.recordRepository.findAll();
     }
 
-    public Set<AlcaldiaDto> alcaldiasDisponibles(){
-        return this.recordRepository.findAll().stream()
-                .map( information -> new AlcaldiaDto( null, information.getAlcaldia().toString() ))
-                .collect(Collectors.toSet());
-    }
-
     public void persist(Template template) {
-        List<Information> data = template.getResult().getRecords().stream()
+        List<Information> data = template.getResult().getRecords().parallelStream()
                 .filter( record ->
-                    record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
-                 )
-                .map( record -> {
+                        record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
+                )
+                .map(record -> {
                     Information info = new Information();
                     info.setIdVehiculo( record.getVehicle_id() );
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
                     try {
                         info.setAlcaldia(
-                                this.buscarAlcaldiaPorCoordenadas(
-                                        record.getPosition_latitude(),
-                                        record.getPosition_longitude()
-                                ).get()
+                                this.buscarAlcaldiaPorCoordenadas( record.getPosition_latitude(), record.getPosition_longitude() ).get()
                         );
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
                     }
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
+                    log.info("REGISTRO: " + info);
                     return info;
-                })
-
-                .collect(Collectors.toList());
-
+                }).collect(Collectors.toList());
         this.recordRepository.saveAll(data);
     }
 
@@ -89,7 +79,6 @@ public class DataServices {
         return this.templateService.getForObject(this.urlApiCDMX, Template.class);
     }
 
-    @Async("threadPoolTaskExecutor")
     public CompletableFuture<Alcaldia> buscarAlcaldiaPorCoordenadas(Double lat, Double lng) {
         String url = this.urlGoogle+"latlng="+lat+","+lng+"&key=" + this.apiKey;
         try {
@@ -97,13 +86,9 @@ public class DataServices {
                     url,
                     GoogleMaps.class
             );
-            assert gm != null;
             int len = !gm.getResults().isEmpty() ? gm.getResults().size() : 0;
-
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name();
             boolean exists = alcaldiaRepository.existsByName(name);
-
-            System.out.println(name);
 
             if (exists) return CompletableFuture.completedFuture(alcaldiaRepository.findByName(name).orElse(null));
             Alcaldia newObject = new Alcaldia();
@@ -115,4 +100,6 @@ public class DataServices {
             return null;
         }
     }
+
+
 }

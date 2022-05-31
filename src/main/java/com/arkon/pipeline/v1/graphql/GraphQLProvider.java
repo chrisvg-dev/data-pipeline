@@ -53,7 +53,7 @@ public class GraphQLProvider {
 
     private RuntimeWiring buildWiring() {
         DataFetcher<List<Information>> records = data -> {
-            return (List<Information>) dataServices.records();
+            return (List<Information>) queryResolver.records();
         };
         DataFetcher<List<Alcaldia>> alcaldias = data -> {
             return (List<Alcaldia>) queryResolver.alcaldiasDisponibles();

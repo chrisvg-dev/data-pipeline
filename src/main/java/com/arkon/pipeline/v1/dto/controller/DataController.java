@@ -31,7 +31,7 @@ public class DataController {
         try {
             Template template = this.dataServices.stream();
             this.dataServices.persist(template);
-            log.info("Recolectando");
+            log.info("DATOS RECOLECTADOS");
             return true;
         }catch (Exception e)  {
             log.error( "Error a la hora de recolectar: " + e.getMessage() );
