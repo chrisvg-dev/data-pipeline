@@ -30,11 +30,14 @@ public class DataController {
      * @return
      */
     @GetMapping("/recolectar")
-    public boolean recolectar() {
+    public boolean recolect() {
         try {
+            /**
+             * Template almacena la información mediante la implementación del patrón de diseño DTO,
+             * mapea toda la información del JSON mediante clases
+             */
             Template template = this.dataServices.stream();
             this.dataServices.persist(template);
-            log.info("DATOS RECOLECTADOS");
             return true;
         }catch (Exception e)  {
             log.error( "Error a la hora de recolectar: " + e.getMessage() );

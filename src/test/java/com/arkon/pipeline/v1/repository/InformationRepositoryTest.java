@@ -3,6 +3,7 @@ package com.arkon.pipeline.v1.repository;
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,20 +21,36 @@ class InformationRepositoryTest {
     @Autowired
     private AlcaldiaRepository alcaldiaRepository;
 
-    @Test
-    void ifIFindById_thenReturnsInformation(){
-        Alcaldia alc = new Alcaldia(null, "AZCAPOTZALCO");
+    private Informacion info, info2;
+    private Alcaldia alcaldia, alcaldia2;
 
-        Informacion info = new Informacion();
-        info.setId(1);
-        info.setAlcaldia(alc);
+    @BeforeEach
+    public void setup() {
+        this.alcaldia = new Alcaldia(1, "AZCAPOTZALCO");
+        this.alcaldiaRepository.save(alcaldia);
+        this.info = new Informacion();
+        info.setId(500);
+        info.setAlcaldia(alcaldia);
         info.setIdVehiculo(170);
         info.setStatusVehiculo(true);
         info.setLatitud(12.000);
         info.setLongitud(-99.000);
+        this.informationRepository.save( this.info );
 
-        this.alcaldiaRepository.save(alc);
-        this.informationRepository.save(info);
+        this.alcaldia2 = new Alcaldia(null, "AZCAPOTZALCO");
+        Informacion info2 = new Informacion();
+        info2.setId(2);
+        info2.setAlcaldia(alcaldia2);
+        info2.setIdVehiculo(171);
+        info2.setStatusVehiculo(false);
+        info2.setLatitud(13.000);
+        info2.setLongitud(-99.000);
+        this.alcaldiaRepository.save(alcaldia2);
+        this.informationRepository.save(info2);
+    }
+
+    @Test
+    void ifIFindById_thenReturnsInformation(){
         Assertions.assertNotNull( this.informationRepository.findById(1) );
     }
 
@@ -45,8 +62,7 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByIdVehicle_thenReturnsInformation(){
-        Integer id = 170;
-        Assertions.assertNotNull( this.informationRepository.findByIdVehiculo(id).orElse(null) );
+        Assertions.assertNotNull( this.informationRepository.findByIdVehiculo(170).get());
     }
 
     @Test
@@ -56,30 +72,6 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByStatus_thenIGetAList() {
-        Alcaldia alc = new Alcaldia(null, "AZCAPOTZALCO");
-        Informacion info = new Informacion();
-        info.setId(1);
-        info.setAlcaldia(alc);
-        info.setIdVehiculo(170);
-        info.setStatusVehiculo(true);
-        info.setLatitud(12.000);
-        info.setLongitud(-99.000);
-
-        this.alcaldiaRepository.save(alc);
-        this.informationRepository.save(info);
-
-        Alcaldia alc2 = new Alcaldia(null, "AZCAPOTZALCO");
-
-        Informacion info2 = new Informacion();
-        info.setId(2);
-        info.setAlcaldia(alc2);
-        info.setIdVehiculo(171);
-        info.setStatusVehiculo(false);
-        info.setLatitud(13.000);
-        info.setLongitud(-99.000);
-        this.alcaldiaRepository.save(alc2);
-        this.informationRepository.save(info2);
-
         List<Informacion> lista = this.informationRepository.findByStatusVehiculo(true).get();
         assertTrue( lista.size() > 0 );
         assertFalse( lista.isEmpty() );
@@ -87,19 +79,7 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByAlcaldia_thenIGetAList() {
-        Alcaldia alc = new Alcaldia(null, "AZCAPOTZALCO");
-        Informacion info = new Informacion();
-        info.setId(2);
-        info.setAlcaldia( alc );
-        info.setIdVehiculo(171);
-        info.setStatusVehiculo(false);
-        info.setLatitud(13.000);
-        info.setLongitud(-99.000);
-
-        this.alcaldiaRepository.save(alc);
-        this.informationRepository.save(info);
-
-        List<Informacion> lista = this.informationRepository.findByAlcaldia(alc).get();
+        List<Informacion> lista = this.informationRepository.findByAlcaldia(this.alcaldia).get();
         assertTrue( lista.size() > 0 );
     }
 }

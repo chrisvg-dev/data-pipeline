@@ -64,7 +64,7 @@ public class DataServices {
      * @param template
      */
     public void persist(Template template) {
-            List<Informacion> data = template.getResult().getRecords().parallelStream()
+            List<Informacion> data = template.getResult().getRecords().stream()
                 .filter( record ->
                         record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
                 )
@@ -148,7 +148,7 @@ public class DataServices {
             if (exists) {
                 return alcaldiaRepository.findByName(name).get();
             }
-            return this.alcaldiaRepository.save(new Alcaldia(0, name));
+            return this.alcaldiaRepository.save(new Alcaldia(0, name.toUpperCase()));
         } catch (Exception e){
             log.error("ERROR: "+  e.getLocalizedMessage() );
             return null;
