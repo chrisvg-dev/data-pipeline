@@ -134,7 +134,7 @@ public class DataServices {
             /** IMPORTANTE
              * Google retorna demasiada información con basándose en las coordenadas proporcionadas, la información de
              * las alcaldias puede ser fácilmente encontrada ubicando la siguiente secuencia:
-             * JSON
+             * JSON completo
              *      - results
              *          - address_components (aquí está toda la información necesaria)
              *
