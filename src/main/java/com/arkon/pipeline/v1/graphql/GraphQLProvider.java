@@ -2,17 +2,12 @@ package com.arkon.pipeline.v1.graphql;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
-import com.arkon.pipeline.v1.services.DataServices;
 import com.google.common.io.Resources;
 import graphql.GraphQL;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.idl.RuntimeWiring;
-import graphql.schema.idl.SchemaGenerator;
-import graphql.schema.idl.SchemaParser;
-import graphql.schema.idl.TypeDefinitionRegistry;
+import graphql.schema.idl.*;
 import org.apache.commons.io.Charsets;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -21,20 +16,37 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
-
+/**
+ * Permite inyectar al contexto de Spring las dependencias necesarias para trabajar con Graphql
+ */
 @Component
 public class GraphQLProvider {
+    /**
+     * Inicia la instancia de Graphql, la cual será necesaria para compilar el esquema utilizado
+     */
     private GraphQL graphQL;
+    /**
+     * Objeto que accede a la clase QueryResolver, en la cual se definen todos los métodos de acceso
+     * a la información de solo lectura.
+     */
     private final QueryResolver queryResolver;
     public GraphQLProvider(QueryResolver queryResolver) {
         this.queryResolver = queryResolver;
     }
+
+    /**
+     * Inyecta mediante un bean a la dependencia de Graphl al contexto de Spring
+     * @return
+     */
     @Bean
     public GraphQL graphQL() {
         return graphQL;
     }
 
+    /**
+     * Toma el esquema y lo inicializa en la aplicación para poder hacer uso de las funciones
+     * @throws IOException
+     */
     @PostConstruct
     public void init() throws IOException {
         URL url = Resources.getResource("schema.graphqls");
@@ -43,6 +55,11 @@ public class GraphQLProvider {
         this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
     }
 
+    /**
+     * Compila el esquema y registra las funcionalidades de la API
+     * @param sdl
+     * @return
+     */
     private GraphQLSchema buildSchema(String sdl) {
         TypeDefinitionRegistry typeRegistry = new SchemaParser().parse(sdl);
         RuntimeWiring runtimeWiring = buildWiring();
@@ -50,6 +67,11 @@ public class GraphQLProvider {
         return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring);
     }
 
+    /**
+     * Se definen las funcionalidades mediante la interface Datafetcher, las cuales se agregan al contexto de la
+     * aplicación con RuntimeWiring
+     * @return
+     */
     private RuntimeWiring buildWiring() {
         DataFetcher<List<Informacion>> records = data -> {
             return (List<Informacion>) queryResolver.records();

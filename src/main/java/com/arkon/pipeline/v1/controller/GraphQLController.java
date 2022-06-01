@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * y de la API de Google
  */
 @RestController
-@RequestMapping("/api/graph")
+@RequestMapping("/api/graph") // Endpoint para conectarse a la aplicación
 @CrossOrigin(origins = "*")
 public class GraphQLController {
     public static final Logger log = LoggerFactory.getLogger(GraphQLController.class);
