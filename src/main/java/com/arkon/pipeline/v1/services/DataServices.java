@@ -57,6 +57,7 @@ public class DataServices {
         this.alcaldiaRepository = alcaldiaRepository;
         this.templateService = templateService;
         this.restClient = restClient;
+
     }
 
     /**
@@ -65,28 +66,12 @@ public class DataServices {
      * acceder a la alcaldia.
      * @param template
      */
-
-    /**
-     * Registrar alcaldias
-     */
-
-    public void registrarAlcaldias() {
-        String alcaldias = "CUAUHTÉMOC,COYOACÁN,IZTAPALAPA,VENUSTIANO_CARRANZA,TLALPAN,ÁLVARO_OBREGÓN,BENITO_JUAREZ,AZCAPOTZALCO,IZTACALCO,GUSTAVO_A._MADERO,MIGUEL_HIDALGO";
-        List<String> listaAlcaldias = Arrays.asList(alcaldias.split(","));
-        List<Alcaldia> data = listaAlcaldias.stream().map(
-                item -> new Alcaldia(null, item.toUpperCase())).collect(Collectors.toList()
-        );
-        this.alcaldiaRepository.saveAll(data);
-        log.info("----------------------- Alcaldias registradas");
-    }
-
     @SneakyThrows
     public void persist(Template template) {
-        this.registrarAlcaldias();
         Thread.sleep(1000);
         long time = System.currentTimeMillis();
         log.info("START: COMIENZA LA DESCARGA DE LOS DATOS...");
-            List<Informacion> data = template.getResult().getRecords().stream()
+            List<Informacion> data = template.getResult().getRecords().parallelStream()
                 .filter( record ->
                         record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
                 )
@@ -97,7 +82,6 @@ public class DataServices {
                     info.setLongitud( record.getPosition_longitude() );
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
                     GoogleMaps gm = this.obtenerAlcaldia(record.getPosition_latitude(), record.getPosition_longitude());
-
                     Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(gm);
                     info.setAlcaldia(alcaldia);
                     return info;
@@ -105,27 +89,7 @@ public class DataServices {
             this.recordRepository.saveAll(data);
         log.info("END: TERMINA LA DESCARGA DE LOS DATOS...");
         long endTime = System.currentTimeMillis();
-        log.info("TIEMPO TRANSCURRIDO: " + ((endTime - time) / 1000));
-    }
-
-    /**
-     * ADVERTENCIA...
-     * Este método se utiliza únicamente cuando se quiere volver a obtener la información de los orígenes remotos.
-     * NO SE RECOMIENDA USARLO CONSTANTEMENTE.
-     * @return
-     */
-    public Template stream() {
-        /**
-         * WARNING
-         * ELIMINA TODOS LOS REGISTROS DE LA BASE DE DATOS
-         */
-        this.recordRepository.deleteAll();
-        this.alcaldiaRepository.deleteAll();
-        /**
-         * WARNING.
-         * CONSULTA NUEVAMENTE LA INFORMACIÓN DE LA API DE LA CIUDAD DE MÉXICO Y LA DESCARGA.
-         */
-        return this.restClient.get();
+        log.info("TIEMPO TRANSCURRIDO: " + ((endTime - time) / 1000) + " segundos");
     }
 
     /**
@@ -136,6 +100,7 @@ public class DataServices {
      * @param lng
      * @return
      */
+    @Async("threadPoolTaskExecutor")
     public GoogleMaps obtenerAlcaldia(Double lat, Double lng){
         String url = this.urlGoogle+"latlng="+lat+","+lng+"&key=" + this.apiKey;
         GoogleMaps gm = templateService.getForObject(url, GoogleMaps.class);
@@ -151,11 +116,9 @@ public class DataServices {
      * @param gm
      * @return
      */
-
-    @Async("threadPoolTaskExecutor")
+    @Synchronized
     public Alcaldia buscarAlcaldiaPorCoordenadas(GoogleMaps gm) {
         int len = gm.getResults().size();
-        log.info( gm.getResults().get(len-4).getAddress_components().get(0).getLong_name() );
         try {
             /** IMPORTANTE
              * Google retorna demasiada información con basándose en las coordenadas proporcionadas, la información de
@@ -169,12 +132,38 @@ public class DataServices {
              *
              */
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name().toUpperCase();
-            Alcaldia alcaldia = alcaldiaRepository.findByName(name.replace(" ", "_"));
-            System.out.println(alcaldia);
-            return alcaldia;
+            boolean existe = alcaldiaRepository.existsByName(name);
+            log.info( existe + ": " + name );
+            Alcaldia alc =  null;
+            if (!existe) {
+                alc = new Alcaldia(null, name);
+                this.alcaldiaRepository.save(alc);
+            }
+            alc = this.alcaldiaRepository.findByName(name);
+            log.info( alc.toString() );
+            return alc;
         } catch (Exception e){
             log.error("ERROR: "+  e.getMessage() );
             return null;
         }
+    }
+    /**
+     * ADVERTENCIA...
+     * Este método se utiliza únicamente cuando se quiere volver a obtener la información de los orígenes remotos.
+     * NO SE RECOMIENDA USARLO CONSTANTEMENTE.
+     * @return
+     */
+    public Template resetInformation() {
+        /**
+         * WARNING
+         * ELIMINA TODOS LOS REGISTROS DE LA BASE DE DATOS
+         */
+        this.recordRepository.deleteAll();
+        this.alcaldiaRepository.deleteAll();
+        /**
+         * WARNING.
+         * CONSULTA NUEVAMENTE LA INFORMACIÓN DE LA API DE LA CIUDAD DE MÉXICO Y LA DESCARGA.
+         */
+        return this.restClient.get();
     }
 }

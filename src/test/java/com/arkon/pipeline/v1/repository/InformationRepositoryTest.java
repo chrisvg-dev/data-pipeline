@@ -52,7 +52,7 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByAlcaldia_thenIGetAList() {
-        Alcaldia alcaldia = this.alcaldiaRepository.findByName("TLALPAN").get();
+        Alcaldia alcaldia = this.alcaldiaRepository.findByName("TLALPAN");
         List<Informacion> lista = this.informationRepository.findByAlcaldia(alcaldia).get();
         assertTrue( lista.size() > 0 );
     }

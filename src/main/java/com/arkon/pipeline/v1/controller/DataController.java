@@ -36,7 +36,7 @@ public class DataController {
              * Template almacena la información mediante la implementación del patrón de diseño DTO,
              * mapea toda la información del JSON mediante clases
              */
-            Template template = this.dataServices.stream();
+            Template template = this.dataServices.resetInformation();
             this.dataServices.persist(template);
             return true;
         }catch (Exception e)  {

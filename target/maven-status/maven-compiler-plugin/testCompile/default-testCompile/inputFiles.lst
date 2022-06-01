@@ -1,6 +1,6 @@
-C:\Users\crist\Documents\Proyectos\postulaciones\arkon\data-pipeline\src\test\java\com\arkon\pipeline\v1\controller\DataControllerTest.java
-C:\Users\crist\Documents\Proyectos\postulaciones\arkon\data-pipeline\src\test\java\com\arkon\pipeline\v1\graphql\QueryResolverTest.java
-C:\Users\crist\Documents\Proyectos\postulaciones\arkon\data-pipeline\src\test\java\com\arkon\pipeline\v1\repository\InformationRepositoryTest.java
-C:\Users\crist\Documents\Proyectos\postulaciones\arkon\data-pipeline\src\test\java\com\arkon\pipeline\v1\services\DataServicesTest.java
-C:\Users\crist\Documents\Proyectos\postulaciones\arkon\data-pipeline\src\test\java\com\arkon\pipeline\v1\V1ApplicationTests.java
-C:\Users\crist\Documents\Proyectos\postulaciones\arkon\data-pipeline\src\test\java\com\arkon\pipeline\v1\repository\AlcaldiaRepositoryTest.java
+C:\Users\crist\Documents\Proyectos\Arkon\v1\src\test\java\com\arkon\pipeline\v1\controller\DataControllerTest.java
+C:\Users\crist\Documents\Proyectos\Arkon\v1\src\test\java\com\arkon\pipeline\v1\repository\AlcaldiaRepositoryTest.java
+C:\Users\crist\Documents\Proyectos\Arkon\v1\src\test\java\com\arkon\pipeline\v1\V1ApplicationTests.java
+C:\Users\crist\Documents\Proyectos\Arkon\v1\src\test\java\com\arkon\pipeline\v1\services\DataServicesTest.java
+C:\Users\crist\Documents\Proyectos\Arkon\v1\src\test\java\com\arkon\pipeline\v1\graphql\QueryResolverTest.java
+C:\Users\crist\Documents\Proyectos\Arkon\v1\src\test\java\com\arkon\pipeline\v1\repository\InformationRepositoryTest.java

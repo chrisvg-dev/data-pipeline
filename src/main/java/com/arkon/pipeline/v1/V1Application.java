@@ -1,12 +1,8 @@
 package com.arkon.pipeline.v1;
 
-import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
-import graphql.GraphQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -16,10 +12,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication // Anotación que define a una aplicación web con Spring
 @Configuration // Permite inyectar las configuraciones y beans de java al contexto de la aplicación
