@@ -1,7 +1,7 @@
 package com.arkon.pipeline.v1.graphql;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
-import com.arkon.pipeline.v1.model.Information;
+import com.arkon.pipeline.v1.model.Informacion;
 import com.arkon.pipeline.v1.services.DataServices;
 import com.google.common.io.Resources;
 import graphql.GraphQL;
@@ -26,11 +26,10 @@ import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 @Component
 public class GraphQLProvider {
     private GraphQL graphQL;
-    @Autowired
-    private DataServices dataServices;
-    @Autowired
-    private QueryResolver queryResolver;
-
+    private final QueryResolver queryResolver;
+    public GraphQLProvider(QueryResolver queryResolver) {
+        this.queryResolver = queryResolver;
+    }
     @Bean
     public GraphQL graphQL() {
         return graphQL;
@@ -52,20 +51,20 @@ public class GraphQLProvider {
     }
 
     private RuntimeWiring buildWiring() {
-        DataFetcher<List<Information>> records = data -> {
-            return (List<Information>) queryResolver.records();
+        DataFetcher<List<Informacion>> records = data -> {
+            return (List<Informacion>) queryResolver.records();
         };
         DataFetcher<List<Alcaldia>> alcaldias = data -> {
             return (List<Alcaldia>) queryResolver.alcaldiasDisponibles();
         };
-        DataFetcher<List<Information>> unidadesDisponibles = data -> {
-            return (List<Information>) queryResolver.unidadesDisponibles();
+        DataFetcher<List<Informacion>> unidadesDisponibles = data -> {
+            return (List<Informacion>) queryResolver.unidadesDisponibles();
         };
-        DataFetcher<Information> buscarPorId = data -> {
-            return (Information) queryResolver.buscarPorId(data.getArgument("idVehiculo"));
+        DataFetcher<Informacion> buscarPorId = data -> {
+            return (Informacion) queryResolver.buscarPorId(data.getArgument("idVehiculo"));
         };
-        DataFetcher<List<Information>> buscarPorAlcaldia = data -> {
-            return (List<Information>) queryResolver.buscarPorAlcaldia(data.getArgument("alcaldia"));
+        DataFetcher<List<Informacion>> buscarPorAlcaldia = data -> {
+            return (List<Informacion>) queryResolver.buscarPorAlcaldia(data.getArgument("alcaldia"));
         };
 
         return RuntimeWiring.newRuntimeWiring().type("Query",

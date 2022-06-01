@@ -10,6 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
+/**
+ * Esta clase representa a las alcaldias que serán recibidas desde Google Maps durante el proceso de recolección
+ * de datos
+ */
 @Entity
 @Data
 @AllArgsConstructor

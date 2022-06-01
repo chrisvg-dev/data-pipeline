@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Almacena unicamente los códigos de la ciudad, no son datos útiles para la aplicación
+ * pero son necesarios para la recepción
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

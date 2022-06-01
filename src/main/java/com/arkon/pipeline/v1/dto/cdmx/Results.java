@@ -1,6 +1,5 @@
-package com.arkon.pipeline.v1.dto;
+package com.arkon.pipeline.v1.dto.cdmx;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

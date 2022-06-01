@@ -1,13 +1,9 @@
 package com.arkon.pipeline.v1.repository;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
-import com.arkon.pipeline.v1.model.Information;
-import com.arkon.pipeline.v1.services.DataServices;
+import com.arkon.pipeline.v1.model.Informacion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -28,7 +24,7 @@ class InformationRepositoryTest {
     void ifIFindById_thenReturnsInformation(){
         Alcaldia alc = new Alcaldia(null, "AZCAPOTZALCO");
 
-        Information info = new Information();
+        Informacion info = new Informacion();
         info.setId(1);
         info.setAlcaldia(alc);
         info.setIdVehiculo(170);
@@ -61,7 +57,7 @@ class InformationRepositoryTest {
     @Test
     void ifIFindByStatus_thenIGetAList() {
         Alcaldia alc = new Alcaldia(null, "AZCAPOTZALCO");
-        Information info = new Information();
+        Informacion info = new Informacion();
         info.setId(1);
         info.setAlcaldia(alc);
         info.setIdVehiculo(170);
@@ -74,7 +70,7 @@ class InformationRepositoryTest {
 
         Alcaldia alc2 = new Alcaldia(null, "AZCAPOTZALCO");
 
-        Information info2 = new Information();
+        Informacion info2 = new Informacion();
         info.setId(2);
         info.setAlcaldia(alc2);
         info.setIdVehiculo(171);
@@ -84,7 +80,7 @@ class InformationRepositoryTest {
         this.alcaldiaRepository.save(alc2);
         this.informationRepository.save(info2);
 
-        List<Information> lista = this.informationRepository.findByStatusVehiculo(true).get();
+        List<Informacion> lista = this.informationRepository.findByStatusVehiculo(true).get();
         assertTrue( lista.size() > 0 );
         assertFalse( lista.isEmpty() );
     }
@@ -92,7 +88,7 @@ class InformationRepositoryTest {
     @Test
     void ifIFindByAlcaldia_thenIGetAList() {
         Alcaldia alc = new Alcaldia(null, "AZCAPOTZALCO");
-        Information info = new Information();
+        Informacion info = new Informacion();
         info.setId(2);
         info.setAlcaldia( alc );
         info.setIdVehiculo(171);
@@ -103,7 +99,7 @@ class InformationRepositoryTest {
         this.alcaldiaRepository.save(alc);
         this.informationRepository.save(info);
 
-        List<Information> lista = this.informationRepository.findByAlcaldia(alc).get();
+        List<Informacion> lista = this.informationRepository.findByAlcaldia(alc).get();
         assertTrue( lista.size() > 0 );
     }
 }

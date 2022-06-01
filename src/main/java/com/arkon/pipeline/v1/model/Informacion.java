@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * La clase Información es la forma final de representación de los datos, los cuales necesitan ser limpiados
- * para obtener la información necesaria para este proyecto.
+ * para obtener la información necesaria para este proyecto. Además es el modelo de la base de datos.
  *
  * La anotación @Entity permite mapear la información para almacenarla en una base de datos mediante JPA
  * La anotación @Data permite generar los métodos Get, Set, toString, Hash, etc. de forma automática
@@ -18,15 +18,19 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Information implements Serializable {
+public class Informacion implements Serializable {
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    /**
+     * Se relaciona el campo alcaldia de la tabla información con la llave primaria de la tabla alcaldia
+     */
     @ManyToOne
     @JoinColumn(name = "alcaldiaId", referencedColumnName = "id")
     private Alcaldia alcaldia;
+
     private Double latitud;
     private Double longitud;
     private Integer idVehiculo;

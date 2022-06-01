@@ -1,4 +1,4 @@
-package com.arkon.pipeline.v1.dto;
+package com.arkon.pipeline.v1.dto.cdmx;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

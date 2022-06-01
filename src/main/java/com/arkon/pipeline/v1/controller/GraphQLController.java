@@ -8,13 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Permite al usuario realizar las peticiones para obtener la información recolectada del API de la ciudad de México
+ * y de la API de Google
+ */
 @RestController
 @RequestMapping("/api/graph")
 @CrossOrigin(origins = "*")
 public class GraphQLController {
     public static final Logger log = LoggerFactory.getLogger(GraphQLController.class);
     private final GraphQL graphQL;
-
     public GraphQLController(GraphQL graphQL) {
         this.graphQL = graphQL;
     }
