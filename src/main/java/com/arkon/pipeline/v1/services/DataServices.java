@@ -7,16 +7,18 @@ import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
 import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
 import com.arkon.pipeline.v1.repository.InformationRepository;
+import lombok.SneakyThrows;
 import lombok.Synchronized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.xml.crypto.Data;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +65,25 @@ public class DataServices {
      * acceder a la alcaldia.
      * @param template
      */
+
+    /**
+     * Registrar alcaldias
+     */
+
+    public void registrarAlcaldias() {
+        String alcaldias = "CUAUHTÉMOC,COYOACÁN,IZTAPALAPA,VENUSTIANO_CARRANZA,TLALPAN,ÁLVARO_OBREGÓN,BENITO_JUAREZ,AZCAPOTZALCO,IZTACALCO,GUSTAVO_A._MADERO,MIGUEL_HIDALGO";
+        List<String> listaAlcaldias = Arrays.asList(alcaldias.split(","));
+        List<Alcaldia> data = listaAlcaldias.stream().map(
+                item -> new Alcaldia(null, item.toUpperCase())).collect(Collectors.toList()
+        );
+        this.alcaldiaRepository.saveAll(data);
+        log.info("----------------------- Alcaldias registradas");
+    }
+
+    @SneakyThrows
     public void persist(Template template) {
+        this.registrarAlcaldias();
+        Thread.sleep(1000);
         long time = System.currentTimeMillis();
         log.info("START: COMIENZA LA DESCARGA DE LOS DATOS...");
             List<Informacion> data = template.getResult().getRecords().stream()
@@ -76,7 +96,9 @@ public class DataServices {
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
-                    Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(record.getPosition_latitude(), record.getPosition_longitude());
+                    GoogleMaps gm = this.obtenerAlcaldia(record.getPosition_latitude(), record.getPosition_longitude());
+
+                    Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(gm);
                     info.setAlcaldia(alcaldia);
                     return info;
                 }).collect(Collectors.toList());
@@ -126,16 +148,15 @@ public class DataServices {
      *
      * La alcaldia encontrada la consulta en la base de datos, si no existe la guarda, caso contrario, la consulta y
      * al final retorna la información necesaria.
-     * @param lat
-     * @param lng
+     * @param gm
      * @return
      */
-    @Synchronized
-    public Alcaldia buscarAlcaldiaPorCoordenadas(Double lat, Double lng) {
-        GoogleMaps gm = this.obtenerAlcaldia(lat, lng);
-        try {
-            int len = gm.getResults().size();
 
+    @Async("threadPoolTaskExecutor")
+    public Alcaldia buscarAlcaldiaPorCoordenadas(GoogleMaps gm) {
+        int len = gm.getResults().size();
+        log.info( gm.getResults().get(len-4).getAddress_components().get(0).getLong_name() );
+        try {
             /** IMPORTANTE
              * Google retorna demasiada información con basándose en las coordenadas proporcionadas, la información de
              * las alcaldias puede ser fácilmente encontrada ubicando la siguiente secuencia:
@@ -147,15 +168,12 @@ public class DataServices {
              * dentro de address_components
              *
              */
-            String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name();
-
-            boolean exists = alcaldiaRepository.existsByName(name);
-            if (exists) {
-                return alcaldiaRepository.findByName(name).get();
-            }
-            return this.alcaldiaRepository.save(new Alcaldia(0, name.toUpperCase()));
+            String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name().toUpperCase();
+            Alcaldia alcaldia = alcaldiaRepository.findByName(name.replace(" ", "_"));
+            System.out.println(alcaldia);
+            return alcaldia;
         } catch (Exception e){
-            log.error("ERROR: "+  e.getLocalizedMessage() );
+            log.error("ERROR: "+  e.getMessage() );
             return null;
         }
     }

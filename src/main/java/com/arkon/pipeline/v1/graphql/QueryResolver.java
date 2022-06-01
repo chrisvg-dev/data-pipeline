@@ -74,7 +74,7 @@ public class QueryResolver implements GraphQLQueryResolver {
      * @return
      */
     public List<Informacion> buscarPorAlcaldia(String alcaldia){
-        Alcaldia alc = this.alcaldiaRepository.findByName(alcaldia.toUpperCase()).orElse(null);
+        Alcaldia alc = this.alcaldiaRepository.findByName(alcaldia.toUpperCase());
         return this.recordRepository.findByAlcaldia(alc).orElse(null);
     }
 }

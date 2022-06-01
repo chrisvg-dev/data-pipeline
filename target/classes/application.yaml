@@ -29,4 +29,4 @@ api:
   url:
     apiKey: AIzaSyA0wl0GTeqSZQOnYkpG_OMYkmw9J8KEOwY
     apiGoogle: https://maps.googleapis.com/maps/api/geocode/json?
-    cdmx: https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=207
+    cdmx: https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=10

@@ -11,7 +11,7 @@ public interface AlcaldiaRepository extends JpaRepository<Alcaldia, Integer> {
      * @param alcaldia
      * @return
      */
-    Optional<Alcaldia> findByName(String alcaldia);
+    Alcaldia findByName(String alcaldia);
     /**
      * Permite buscar una Alcaldia mediante el nombre, si existe retorna true, caso contrario retorna false
      * @param alcaldia
