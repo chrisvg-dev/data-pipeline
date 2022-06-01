@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 public class QueryResolverTest {
     @Mock
     private InformationRepository informationRepository;
@@ -60,13 +62,13 @@ public class QueryResolverTest {
         info2.setLongitud(-99.000);
         this.alcaldiaRepository.save(alcaldia2);
         this.informationRepository.save(info2);
+        this.lista = new ArrayList();
+        lista.add(info); lista.add(info2);
     }
 
     @DisplayName("JUnit test for get all")
     @Test
     public void givenInformationList_whenGetAllInformation_thenReturnInformationList(){
-        List<Informacion> lista = new ArrayList();
-        lista.add(info); lista.add(info2);
         given(informationRepository.findAll()).willReturn(lista);
         List<Informacion> informacionList = this.queryResolver.records();
         assertThat(informacionList).isNotNull();

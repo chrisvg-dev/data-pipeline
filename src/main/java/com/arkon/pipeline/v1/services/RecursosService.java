@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
-public class DataServices {
+public class RecursosService {
     public static final Logger log = LoggerFactory.getLogger(Data.class);
 
     /**
@@ -52,7 +52,7 @@ public class DataServices {
     /**
      * ---------------------------------------------------------
      */
-    public DataServices(InformationRepository recordRepository, AlcaldiaRepository alcaldiaRepository, RestTemplate templateService, RestClient restClient) {
+    public RecursosService(InformationRepository recordRepository, AlcaldiaRepository alcaldiaRepository, RestTemplate templateService, RestClient restClient) {
         this.recordRepository = recordRepository;
         this.alcaldiaRepository = alcaldiaRepository;
         this.templateService = templateService;
@@ -136,7 +136,7 @@ public class DataServices {
             log.info( existe + ": " + name );
             Alcaldia alc =  null;
             if (!existe) {
-                alc = new Alcaldia(null, name);
+                alc = new Alcaldia(0, name);
                 this.alcaldiaRepository.save(alc);
             }
             alc = this.alcaldiaRepository.findByName(name);

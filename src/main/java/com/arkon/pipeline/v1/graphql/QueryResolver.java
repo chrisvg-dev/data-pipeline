@@ -4,6 +4,8 @@ import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
 import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
 import com.arkon.pipeline.v1.repository.InformationRepository;
+import com.arkon.pipeline.v1.services.AlcaldiaService;
+import com.arkon.pipeline.v1.services.InformacionService;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,24 +25,22 @@ import java.util.List;
 @Component
 public class QueryResolver implements GraphQLQueryResolver {
     public static final Logger log = LoggerFactory.getLogger(Data.class);
-
     /**
      * Inyección de repositorios para poder hacer uso de ellos dentro de QueryResolver
      */
-    private final InformationRepository recordRepository;
-    private final AlcaldiaRepository alcaldiaRepository;
+    private final InformacionService informacionService;
+    private final AlcaldiaService alcaldiaService;
 
-    public QueryResolver(InformationRepository recordRepository, AlcaldiaRepository alcaldiaRepository) {
-        this.recordRepository = recordRepository;
-        this.alcaldiaRepository = alcaldiaRepository;
+    public QueryResolver(InformacionService informacionService, AlcaldiaService alcaldiaService) {
+        this.informacionService = informacionService;
+        this.alcaldiaService = alcaldiaService;
     }
-
     /**
      * Permite listar la información utilizando la interface JPA
      * @return
      */
     public List<Informacion> records(){
-        return this.recordRepository.findAll();
+        return this.informacionService.buscarTodos();
     }
 
     /**
@@ -48,14 +48,14 @@ public class QueryResolver implements GraphQLQueryResolver {
      * @return
      */
     public List<Alcaldia> alcaldiasDisponibles(){
-        return this.alcaldiaRepository.findAll();
+        return this.alcaldiaService.buscarTodas();
     }
     /**
      * Permite listar las unidades registradas en la base de datos siempre y cuando tengan el status en disponible
      * @return
      */
     public List<Informacion> unidadesDisponibles() {
-        return this.recordRepository.findByStatusVehiculo(true).orElse(null);
+        return this.informacionService.unidadesDisponibles();
     }
 
     /**
@@ -65,7 +65,7 @@ public class QueryResolver implements GraphQLQueryResolver {
      * @return
      */
     public Informacion buscarPorId(Integer idVehiculo) {
-        return this.recordRepository.findByIdVehiculo(idVehiculo).orElse(null);
+        return this.informacionService.buscarPorId(idVehiculo);
     }
     /**
      * Permite obtener un todos los registros de la base de datos que coincidan con
@@ -74,7 +74,6 @@ public class QueryResolver implements GraphQLQueryResolver {
      * @return
      */
     public List<Informacion> buscarPorAlcaldia(String alcaldia){
-        Alcaldia alc = this.alcaldiaRepository.findByName(alcaldia.toUpperCase());
-        return this.recordRepository.findByAlcaldia(alc).orElse(null);
+        return this.informacionService.buscarPorAlcaldia(alcaldia.toUpperCase());
     }
 }

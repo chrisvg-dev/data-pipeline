@@ -1,54 +1,56 @@
 package com.arkon.pipeline.v1.repository;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
-import com.arkon.pipeline.v1.model.Informacion;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.test.context.junit4.SpringRunner;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AlcaldiaRepositoryTest {
+@RunWith(SpringRunner.class)
+public class AlcaldiaRepositoryTest {
     @Autowired
     private AlcaldiaRepository alcaldiaRepository;
 
-
     @Test
-    public void contextLoads() {
-        assertThat(alcaldiaRepository).isNotNull();
-    }
-    private Alcaldia alcaldia, alcaldia2, alcaldia3;
-
-    @BeforeEach
-    public void setup() {
-        this.alcaldia = new Alcaldia(1, "AZCAPOTZALCO");
-        this.alcaldia2 = new Alcaldia(null, "CUAUHTEMOC");
-        this.alcaldia3 = new Alcaldia(null, "BENITO JUAREZ");
-        this.alcaldiaRepository.save(alcaldia);
-        this.alcaldiaRepository.save(alcaldia2);
-        this.alcaldiaRepository.save(alcaldia3);
-    }
-    @Test
-    void givenList_whenGetAllResults_thenGiveAList(){
-        assertFalse( this.alcaldiaRepository.findAll().isEmpty() );
+    public void saveAlcaldiaTest() {
+        Alcaldia nuevaAlcaldia = new Alcaldia();
+        nuevaAlcaldia.setName("ALCALDIA1");
+        Alcaldia dbAlcaldia = alcaldiaRepository.save(nuevaAlcaldia);
+        Assertions.assertThat( dbAlcaldia.getId() ).isGreaterThan(0);
+        Assertions.assertThat( dbAlcaldia ).isNotNull();
     }
 
     @Test
-    void givenItem_whenGetItem_thenGiveAnItem(){
-        this.alcaldia = new Alcaldia(1, "AZCAPOTZALCO");
-        this.alcaldiaRepository.save(alcaldia);
-        //assertEquals(alcaldia, this.alcaldiaRepository.findByName("AZCAPOTZALCO") );
+    public void buscarAlcaldiaPorNombre_devuelveObjeto() {
+        Alcaldia nuevaAlcaldia = new Alcaldia();
+        nuevaAlcaldia.setName("ALCALDIA1");
+        alcaldiaRepository.save(nuevaAlcaldia);
+
+        Alcaldia dbAlcaldia = alcaldiaRepository.findByName("ALCALDIA1");
+        Assertions.assertThat( dbAlcaldia.getId() ).isGreaterThan(0);
+        Assertions.assertThat( dbAlcaldia ).isNotNull();
     }
 
+    @Test
+    public void buscarAlcaldiaPorNombreNoExistente_devuelveNull() {
+        Alcaldia dbAlcaldia = alcaldiaRepository.findByName("ALCALDIA1");
+        org.junit.jupiter.api.Assertions.assertNull(dbAlcaldia);
+    }
+
+    @Test
+    public void buscarTodasLasAlcaldias_DevuelveUnaLista() {
+        Alcaldia nuevaAlcaldia = new Alcaldia();
+        nuevaAlcaldia.setName("ALCALDIA1");
+        alcaldiaRepository.save(nuevaAlcaldia);
+        nuevaAlcaldia = new Alcaldia();
+        nuevaAlcaldia.setName("ALCALDIA2");
+        alcaldiaRepository.save(nuevaAlcaldia);
+        Assertions.assertThat(alcaldiaRepository.findAll().size()).isGreaterThan(0);
+    }
 }

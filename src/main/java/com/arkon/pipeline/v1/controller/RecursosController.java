@@ -1,7 +1,7 @@
 package com.arkon.pipeline.v1.controller;
 
 import com.arkon.pipeline.v1.dto.cdmx.Template;
-import com.arkon.pipeline.v1.services.DataServices;
+import com.arkon.pipeline.v1.services.RecursosService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/pipeline") // Endpoint de la aplicación
 @CrossOrigin(origins = "*") // Activa el acceso a la API desde cualquier ubicación
-public class DataController {
-    public static final Logger log = LoggerFactory.getLogger(DataController.class);
-    private final DataServices dataServices;
-    public DataController(DataServices dataServices) {
+public class RecursosController {
+    public static final Logger log = LoggerFactory.getLogger(RecursosController.class);
+    private final RecursosService dataServices;
+    public RecursosController(RecursosService dataServices) {
         this.dataServices = dataServices;
     }
 
