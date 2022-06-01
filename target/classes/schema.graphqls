@@ -1,0 +1,25 @@
+schema {
+  query: Query
+}
+
+type Query {
+  records: [Information]
+  unidadesDisponibles: [Information]
+  alcaldiasDisponibles: [Alcaldia]
+  buscarPorId(idVehiculo: Int): Information
+  buscarPorAlcaldia(alcaldia: String): [Information]
+}
+
+type Alcaldia {
+  id: ID
+  name: String!
+}
+
+type Information {
+  id: ID
+  alcaldia: Alcaldia!
+  latitud: Float!
+  longitud: Float!
+  idVehiculo: Int!
+  statusVehiculo: Boolean!
+}

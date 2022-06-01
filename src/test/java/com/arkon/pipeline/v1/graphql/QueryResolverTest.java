@@ -30,7 +30,7 @@ public class QueryResolverTest {
     private InformationRepository informationRepository;
     @Mock
     private AlcaldiaRepository alcaldiaRepository;
-    private QueryResolver queryResolver;
+    @InjectMocks private QueryResolver queryResolver;
 
     private Informacion info, info2;
     private Alcaldia alcaldia, alcaldia2;
@@ -71,15 +71,5 @@ public class QueryResolverTest {
         List<Informacion> informacionList = this.queryResolver.records();
         assertThat(informacionList).isNotNull();
         assertThat(informacionList.size()).isEqualTo(2);
-    }
-
-    @DisplayName("JUnit test for get all")
-    @Test
-    public void givenInformationList_whenGetAvailableInformation_thenReturnInformationList(){
-        List<Informacion> lista = new ArrayList();
-        lista.add(info); lista.add(info2);
-        assertNotEquals(null, Optional.of(this.informationRepository.findByStatusVehiculo(true)));
-        assertNotEquals(null, this.queryResolver.unidadesDisponibles());
-        assertTrue( this.queryResolver.unidadesDisponibles().isEmpty() );
     }
 }

@@ -21,34 +21,6 @@ class InformationRepositoryTest {
     @Autowired
     private AlcaldiaRepository alcaldiaRepository;
 
-    private Informacion info, info2;
-    private Alcaldia alcaldia, alcaldia2;
-
-    @BeforeEach
-    public void setup() {
-        this.alcaldia = new Alcaldia(1, "AZCAPOTZALCO");
-        this.alcaldiaRepository.save(alcaldia);
-        this.info = new Informacion();
-        info.setId(500);
-        info.setAlcaldia(alcaldia);
-        info.setIdVehiculo(170);
-        info.setStatusVehiculo(true);
-        info.setLatitud(12.000);
-        info.setLongitud(-99.000);
-        this.informationRepository.save( this.info );
-
-        this.alcaldia2 = new Alcaldia(null, "AZCAPOTZALCO");
-        Informacion info2 = new Informacion();
-        info2.setId(2);
-        info2.setAlcaldia(alcaldia2);
-        info2.setIdVehiculo(171);
-        info2.setStatusVehiculo(false);
-        info2.setLatitud(13.000);
-        info2.setLongitud(-99.000);
-        this.alcaldiaRepository.save(alcaldia2);
-        this.informationRepository.save(info2);
-    }
-
     @Test
     void ifIFindById_thenReturnsInformation(){
         Assertions.assertNotNull( this.informationRepository.findById(1) );
@@ -62,7 +34,8 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByIdVehicle_thenReturnsInformation(){
-        Assertions.assertNotNull( this.informationRepository.findByIdVehiculo(170).get());
+        Informacion info = this.informationRepository.findByIdVehiculo(170).get();
+        Assertions.assertNotNull( info );
     }
 
     @Test
@@ -79,7 +52,8 @@ class InformationRepositoryTest {
 
     @Test
     void ifIFindByAlcaldia_thenIGetAList() {
-        List<Informacion> lista = this.informationRepository.findByAlcaldia(this.alcaldia).get();
+        Alcaldia alcaldia = this.alcaldiaRepository.findByName("TLALPAN").get();
+        List<Informacion> lista = this.informationRepository.findByAlcaldia(alcaldia).get();
         assertTrue( lista.size() > 0 );
     }
 }

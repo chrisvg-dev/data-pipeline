@@ -64,6 +64,8 @@ public class DataServices {
      * @param template
      */
     public void persist(Template template) {
+        long time = System.currentTimeMillis();
+        log.info("START: COMIENZA LA DESCARGA DE LOS DATOS...");
             List<Informacion> data = template.getResult().getRecords().stream()
                 .filter( record ->
                         record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
@@ -79,6 +81,9 @@ public class DataServices {
                     return info;
                 }).collect(Collectors.toList());
             this.recordRepository.saveAll(data);
+        log.info("END: TERMINA LA DESCARGA DE LOS DATOS...");
+        long endTime = System.currentTimeMillis();
+        log.info("TIEMPO TRANSCURRIDO: " + ((endTime - time) / 1000));
     }
 
     /**
