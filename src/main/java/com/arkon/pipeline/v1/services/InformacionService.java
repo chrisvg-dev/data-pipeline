@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 /**
  * Servicio que agrupa todas las funcionalidades que tienen relación con la entidad Información, cuyos datos provienen
  * de origenes remotos.

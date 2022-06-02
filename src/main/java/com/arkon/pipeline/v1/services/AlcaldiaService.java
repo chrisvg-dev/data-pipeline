@@ -15,8 +15,11 @@ import java.util.List;
 @Service
 @Transactional
 public class AlcaldiaService {
-    @Autowired
-    private AlcaldiaRepository alcaldiaRepository;
+    private final AlcaldiaRepository alcaldiaRepository;
+
+    public AlcaldiaService(AlcaldiaRepository alcaldiaRepository) {
+        this.alcaldiaRepository = alcaldiaRepository;
+    }
 
     /**
      * Permite listar las alcaldias disponibles en la base de datos

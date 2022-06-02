@@ -2,7 +2,6 @@ package com.arkon.pipeline.v1.repository;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
