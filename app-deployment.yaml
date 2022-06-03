@@ -15,7 +15,7 @@ spec:
       containers:
         - name: spring-k8s
           imagePullPolicy: Never
-          image: spring-k8s:latest
+          image: spring-k8s:2.1
           ports:
             - containerPort: 8080
           env: # Setting Enviornmental Variables
