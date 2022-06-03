@@ -16,11 +16,9 @@ import java.util.List;
 @Transactional
 public class AlcaldiaService {
     private final AlcaldiaRepository alcaldiaRepository;
-
     public AlcaldiaService(AlcaldiaRepository alcaldiaRepository) {
         this.alcaldiaRepository = alcaldiaRepository;
     }
-
     /**
      * Permite listar las alcaldias disponibles en la base de datos
      * @return
@@ -28,7 +26,6 @@ public class AlcaldiaService {
     public List<Alcaldia> buscarTodas(){
         return this.alcaldiaRepository.findAll();
     }
-
     /**
      * Permite buscar una alcaldia solamente ingresando su nombre, lo cual devuelve un objeto de tipo Alcaldia
      * @param nombre

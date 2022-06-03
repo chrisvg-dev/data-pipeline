@@ -3,7 +3,6 @@ package com.arkon.pipeline.v1.services;
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
 import com.arkon.pipeline.v1.repository.InformationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ public class InformacionService {
         this.informationRepository = informationRepository;
         this.alcaldiaService = alcaldiaService;
     }
-
     /**
      * Permite listar la información utilizando la interface JPA
      * @return
@@ -30,15 +28,13 @@ public class InformacionService {
     public List<Informacion> buscarTodos(){
         return this.informationRepository.findAll();
     }
-
     /**
      * Permite listar las unidades registradas en la base de datos siempre y cuando tengan el status en disponible
      * @return
      */
     public List<Informacion> unidadesDisponibles() {
-        return this.informationRepository.findByStatusVehiculo(true).orElse(null);
+        return this.informationRepository.findByStatusVehiculo(true);
     }
-
     /**
      * Permite obtener un registro de la base de datos que coincida con el ID proporcionado por el usuario mediante
      * la api de Graphql
@@ -46,7 +42,7 @@ public class InformacionService {
      * @return
      */
     public Informacion buscarPorId(Integer idVehiculo) {
-        return this.informationRepository.findByIdVehiculo(idVehiculo).orElse(null);
+        return this.informationRepository.findByIdVehiculo(idVehiculo);
     }
     /**
      * Permite obtener un todos los registros de la base de datos que coincidan con
@@ -56,6 +52,6 @@ public class InformacionService {
      */
     public List<Informacion> buscarPorAlcaldia(String alcaldia){
         Alcaldia alc = this.alcaldiaService.buscarPorNombre(alcaldia.toUpperCase());
-        return this.informationRepository.findByAlcaldia(alc).orElse(null);
+        return this.informationRepository.findByAlcaldia(alc);
     }
 }

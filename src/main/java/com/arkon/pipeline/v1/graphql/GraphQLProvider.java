@@ -10,12 +10,10 @@ import graphql.schema.idl.*;
 import org.apache.commons.io.Charsets;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-
 /**
  * Permite inyectar al contexto de Spring las dependencias necesarias para trabajar con Graphql
  */
@@ -33,7 +31,6 @@ public class GraphQLProvider {
     public GraphQLProvider(QueryResolver queryResolver) {
         this.queryResolver = queryResolver;
     }
-
     /**
      * Inyecta mediante un bean a la dependencia de Graphl al contexto de Spring
      * @return
@@ -42,7 +39,6 @@ public class GraphQLProvider {
     public GraphQL graphQL() {
         return graphQL;
     }
-
     /**
      * Toma el esquema y lo inicializa en la aplicación para poder hacer uso de las funciones
      * @throws IOException
@@ -54,7 +50,6 @@ public class GraphQLProvider {
         GraphQLSchema graphQLSchema = buildSchema(sdl);
         this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
     }
-
     /**
      * Compila el esquema y registra las funcionalidades de la API
      * @param sdl
@@ -66,7 +61,6 @@ public class GraphQLProvider {
         SchemaGenerator schemaGenerator = new SchemaGenerator();
         return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring);
     }
-
     /**
      * Se definen las funcionalidades mediante la interface Datafetcher, las cuales se agregan al contexto de la
      * aplicación con RuntimeWiring

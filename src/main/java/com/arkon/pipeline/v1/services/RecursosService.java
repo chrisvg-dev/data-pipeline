@@ -8,7 +8,6 @@ import com.arkon.pipeline.v1.model.Informacion;
 import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
 import com.arkon.pipeline.v1.repository.InformationRepository;
 import lombok.SneakyThrows;
-import lombok.Synchronized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.stream.Collectors;
-
 /**
  * Servicio que agrupa todas las funcionalidades que tienen relación con la obtención de la información que proviene
  * de origenes remotos. Este servicio solo se invoca una vez, cuando se necesita llenar la base de datos.
@@ -29,13 +27,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class RecursosService {
     public static final Logger log = LoggerFactory.getLogger(Data.class);
-
     /**
      * URL de la API de Google, de aquí se obtienen los datos de las alcaldias
      */
     @Value("${api.url.apiGoogle}")
     private String urlGoogle;
-
     /**
      * API key del servicio de Google, necesario para realizar las peticiones
      */
@@ -57,10 +53,8 @@ public class RecursosService {
         this.alcaldiaRepository = alcaldiaRepository;
         this.templateService = templateService;
         this.restClient = restClient;
-
     }
-
-    /**
+    /** ----------------------------------------------------------------------------------------------------------
      * Método que se encarga de almacenar la información en la base de datos, este método lleva un proceso en el
      * que mediante manejo de flujos se manda a llamar de forma asíncrona la información de Google Maps para
      * acceder a la alcaldia.
@@ -71,7 +65,7 @@ public class RecursosService {
         Thread.sleep(1000);
         long time = System.currentTimeMillis();
         log.info("START: COMIENZA LA DESCARGA DE LOS DATOS...");
-            List<Informacion> data = template.getResult().getRecords().parallelStream()
+            List<Informacion> data = template.getResult().getRecords().stream()
                 .filter( record ->
                         record.getPosition_latitude() > 0.0 || record.getPosition_longitude() > 0.0
                 )
@@ -91,10 +85,13 @@ public class RecursosService {
         long endTime = System.currentTimeMillis();
         log.info("TIEMPO TRANSCURRIDO: " + ((endTime - time) / 1000) + " segundos");
     }
+    /**
+     * ------------------------------------------------------------------------------------------------------------------
+     */
 
     /**
-     * Se conecta a la API de Google y descarga el JSON con la información de la ubicación con base en la
-     * latitud y longitud proporcionada.
+     * Este método permite conectarse a la API de Google y descarga el JSON con la información de la ubicación con
+     * base en la latitud y longitud proporcionada.
      * Retorna un DTO de GoogleMaps, que se puede encontrar en la carpeta DTO.
      * @param lat
      * @param lng
@@ -106,7 +103,6 @@ public class RecursosService {
         GoogleMaps gm = templateService.getForObject(url, GoogleMaps.class);
         return gm;
     }
-
     /**
      * Recibe las coordenadas (latitud y longitud), con ellas invoca al método de obtenerAlcaldia que viene en
      * formato DTO, lo descompone y extrae mediante un simple algoritmo la información requerida de la alcaldia.
@@ -116,7 +112,6 @@ public class RecursosService {
      * @param gm
      * @return
      */
-    @Synchronized
     public Alcaldia buscarAlcaldiaPorCoordenadas(GoogleMaps gm) {
         int len = gm.getResults().size();
         try {
@@ -153,7 +148,7 @@ public class RecursosService {
      * NO SE RECOMIENDA USARLO CONSTANTEMENTE.
      * @return
      */
-    public Template resetInformation() {
+    public Template reset() {
         /**
          * WARNING
          * ELIMINA TODOS LOS REGISTROS DE LA BASE DE DATOS

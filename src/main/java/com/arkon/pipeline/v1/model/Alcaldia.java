@@ -20,6 +20,5 @@ public class Alcaldia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "name", unique = true)
     private String name;
 }

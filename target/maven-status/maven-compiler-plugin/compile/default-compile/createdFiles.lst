@@ -1,10 +1,10 @@
+com\arkon\pipeline\v1\services\AlcaldiaService.class
 com\arkon\pipeline\v1\repository\AlcaldiaRepository.class
-com\arkon\pipeline\v1\controller\DataController.class
 com\arkon\pipeline\v1\client\RestClient.class
 com\arkon\pipeline\v1\dto\cdmx\Record.class
 com\arkon\pipeline\v1\controller\GraphQLController.class
+com\arkon\pipeline\v1\services\RecursosService.class
 com\arkon\pipeline\v1\dto\maps\GoogleAddressComponent.class
-com\arkon\pipeline\v1\services\DataServices.class
 com\arkon\pipeline\v1\dto\maps\GoogleMaps.class
 com\arkon\pipeline\v1\dto\maps\GooglePlusCode.class
 com\arkon\pipeline\v1\graphql\QueryResolver.class
@@ -13,6 +13,8 @@ com\arkon\pipeline\v1\model\Informacion.class
 com\arkon\pipeline\v1\dto\cdmx\Results.class
 com\arkon\pipeline\v1\dto\maps\GoogleResults.class
 com\arkon\pipeline\v1\repository\InformationRepository.class
+com\arkon\pipeline\v1\controller\RecursosController.class
 com\arkon\pipeline\v1\model\Alcaldia.class
+com\arkon\pipeline\v1\services\InformacionService.class
 com\arkon\pipeline\v1\dto\cdmx\Template.class
 com\arkon\pipeline\v1\graphql\GraphQLProvider.class

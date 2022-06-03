@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication // Anotación que define a una aplicación web con Spring
 @Configuration // Permite inyectar las configuraciones y beans de java al contexto de la aplicación
 @EnableFeignClients // Habilita las peticiones a API con Feign
-@EnableAsync
+@EnableAsync // Habilita el trabajo asíncrono para algunas funcionalidades
 public class V1Application {
 	private static final Logger log = LoggerFactory.getLogger(V1Application.class);
 
