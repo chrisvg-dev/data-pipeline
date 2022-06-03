@@ -13,11 +13,12 @@ spec:
         app: springboot-k8s-mysql
     spec:
       containers:
-        - name: springboot-pipeline-k8s
-          image: pipeline:latest
+        - name: spring-k8s
+          imagePullPolicy: Never
+          image: spring-k8s:latest
           ports:
-            - containerPort: 9090
-          env:   # Setting Enviornmental Variables
+            - containerPort: 8080
+          env: # Setting Enviornmental Variables
             - name: DB_HOST   # Setting Database host address from configMap
               value: mysql
 
@@ -41,6 +42,6 @@ spec:
     app: springboot-k8s-mysql
   ports:
     - protocol: "TCP"
-      port: 9090 # The port that the service is running on in the cluster
-      targetPort: 9090 # The port exposed by the service
+      port: 8080 # The port that the service is running on in the cluster
+      targetPort: 8080 # The port exposed by the service
   type: NodePort # type of the service.

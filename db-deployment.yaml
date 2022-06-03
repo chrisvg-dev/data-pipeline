@@ -1,3 +1,20 @@
+# Define a 'Service' To Expose mysql to Other Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql  # DNS name
+  labels:
+    app: mysql
+    tier: database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:       # mysql Pod Should contain same labels
+    app: mysql
+    tier: database
+  clusterIP: None  # We Use DNS, Thus ClusterIP is not relevant
+---
 # Define a 'Persistent Voulume Claim'(PVC) for Mysql Storage, dynamically provisioned by cluster
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -40,36 +57,21 @@ spec:
             - "--ignore-db-dir=lost+found" # Workaround for https://github.com/docker-library/mysql/issues/186
           name: mysql
           env:
-            - name: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD # Setting Root Password of mysql From a 'Secret'
               value: password
-
+            - name: MYSQL_USER # Setting USER username on mysql From a 'Secret'
+              value: user
+            - name: MYSQL_PASSWORD # Setting USER Password on mysql From a 'Secret'
+              value: password
             - name: MYSQL_DATABASE # Setting Database Name from a 'ConfigMap'
               value: pipeline
-
-
           ports:
             - containerPort: 3306
               name: mysql
           volumeMounts:        # Mounting voulume obtained from Persistent Volume Claim
             - name: mysql-persistent-storage
-              mountPath: /home/apps/mysql #This is the path in the container on which the mounting will take place.
+              mountPath: /var/mysql #This is the path in the container on which the mounting will take place.
       volumes:
         - name: mysql-persistent-storage # Obtaining 'vloume' from PVC
           persistentVolumeClaim:
             claimName: mysql-pv-claim
----
-# Define a 'Service' To Expose mysql to Other Services
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql  # DNS name
-  labels:
-    app: mysql
-    tier: database
-spec:
-  ports:
-    - port: 3306
-      targetPort: 3306
-  selector:       # mysql Pod Should contain same labels
-    app: mysql
-    tier: database
