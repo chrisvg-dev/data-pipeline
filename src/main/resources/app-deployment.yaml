@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: spring-k8s
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           image: spring:latest
           ports:
             - containerPort: 9090
