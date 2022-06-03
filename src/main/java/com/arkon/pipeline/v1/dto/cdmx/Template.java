@@ -1,6 +1,5 @@
-package com.arkon.pipeline.v1.dto;
+package com.arkon.pipeline.v1.dto.cdmx;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
  * Cada variable de esta clase representa la llave del json recibido, y tienen como único objetivo
  * representar la información.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

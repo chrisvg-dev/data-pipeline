@@ -1,0 +1,6 @@
+com\arkon\pipeline\v1\services\RecursosServiceTest.class
+com\arkon\pipeline\v1\V1ApplicationTests.class
+com\arkon\pipeline\v1\services\InformacionServiceTest.class
+com\arkon\pipeline\v1\repository\AlcaldiaRepositoryTest.class
+com\arkon\pipeline\v1\repository\InformationRepositoryTest.class
+com\arkon\pipeline\v1\services\AlcaldiaServiceTest.class

@@ -6,11 +6,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Clase modelo que representa la información que será recibida desde la API de Google a través del
+ * envío de la ubicación en formato de latitud y longitud
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class GoogleMaps {
-    private PlusCode plus_code;
-    private List<Results> results;
+    private GooglePlusCode plus_code;
+    private List<GoogleResults> results;
     private String status;
 }
