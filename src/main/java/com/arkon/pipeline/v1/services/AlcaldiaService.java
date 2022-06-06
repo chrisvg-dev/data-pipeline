@@ -2,7 +2,6 @@ package com.arkon.pipeline.v1.services;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,5 +32,9 @@ public class AlcaldiaService {
      */
     public Alcaldia buscarPorNombre(String nombre) {
         return this.alcaldiaRepository.findByName(nombre);
+    }
+    public Boolean Reactivo_buscarPorNombre(String nombre) {
+       // return this.alcaldiaReactiveRepository.existsByName(nombre).block();
+        return false;
     }
 }

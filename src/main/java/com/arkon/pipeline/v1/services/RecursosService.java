@@ -43,14 +43,16 @@ public class RecursosService {
      */
     private final InformationRepository recordRepository;
     private final AlcaldiaRepository alcaldiaRepository;
+    private final AlcaldiaService alcaldiaService;
     private final RestTemplate templateService;
     private final RestClient restClient;
     /**
      * ---------------------------------------------------------
      */
-    public RecursosService(InformationRepository recordRepository, AlcaldiaRepository alcaldiaRepository, RestTemplate templateService, RestClient restClient) {
+    public RecursosService(InformationRepository recordRepository, AlcaldiaRepository alcaldiaRepository, AlcaldiaService alcaldiaService, RestTemplate templateService, RestClient restClient) {
         this.recordRepository = recordRepository;
         this.alcaldiaRepository = alcaldiaRepository;
+        this.alcaldiaService = alcaldiaService;
         this.templateService = templateService;
         this.restClient = restClient;
     }
@@ -127,6 +129,7 @@ public class RecursosService {
              *
              */
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name().toUpperCase();
+            //boolean existe = alcaldiaRepository.existsByName(name);
             boolean existe = alcaldiaRepository.existsByName(name);
             log.info( existe + ": " + name );
             Alcaldia alc =  null;
