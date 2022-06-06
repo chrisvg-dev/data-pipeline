@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Permite al usuario realizar las peticiones para obtener la información recolectada del API de la ciudad de México
- * y de la API de Google
+ * y del API de Google
  */
 @RestController
 @RequestMapping("/api/graph") // Endpoint para conectarse a la aplicación
@@ -23,8 +23,8 @@ public class GraphQLController {
     }
 
     /**
-     * Este método se encarga de gestionar las peticiones del cliente y devolver los datos con GraphQL
-     * Recibe una consulta mediante el método POST
+     * Este método se encarga de gestionar las peticiones del cliente y devolver los datos con GraphQL.
+     * Recibe una consulta a través de una petición POST
      * @param query
      * @return
      */
