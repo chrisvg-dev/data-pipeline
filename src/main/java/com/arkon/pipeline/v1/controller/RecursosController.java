@@ -30,7 +30,7 @@ public class RecursosController {
      * @return
      */
     @GetMapping("/recolectar")
-    public boolean recolect() {
+    public boolean collect() {
         try {
             /**
              * Template almacena la información mediante la implementación del patrón de diseño DTO,

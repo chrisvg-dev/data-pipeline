@@ -92,7 +92,7 @@ public class RecursosService {
      */
 
     /**
-     * Este método permite conectarse a la API de Google y descarga el JSON con la información de la ubicación con
+     * Este método permite conectarse a la API de Google y descargar el JSON con la información de la ubicación con
      * base en la latitud y longitud proporcionada.
      * Retorna un DTO de GoogleMaps, que se puede encontrar en la carpeta DTO.
      * @param lat
@@ -118,7 +118,7 @@ public class RecursosService {
         int len = gm.getResults().size();
         try {
             /** IMPORTANTE
-             * Google retorna demasiada información con basándose en las coordenadas proporcionadas, la información de
+             * Google retorna demasiada información basándose en las coordenadas proporcionadas, la información de
              * las alcaldias puede ser fácilmente encontrada ubicando la siguiente secuencia:
              * JSON completo
              *      - results
