@@ -26,7 +26,9 @@ public class RecursosController {
      * metrobuses de la Ciudad de México.
      *
      * Si hay un error a la hora de recolectar se retorna un false, lo cual se utiliza para validar la información
-     * en el frontend
+     * en el frontend.
+     *
+     * TIEMPO APROXIMADO DE EJECUCIÓN: 40 SEGS
      * @return
      */
     @GetMapping("/recolectar")
@@ -34,7 +36,7 @@ public class RecursosController {
         try {
             /**
              * Template almacena la información mediante la implementación del patrón de diseño DTO,
-             * mapea toda la información del JSON mediante clases
+             * mapea toda la información del JSON mediante clases.
              */
             Template template = this.dataServices.reset();
             this.dataServices.persist(template);
