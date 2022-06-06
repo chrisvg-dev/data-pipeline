@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
         name = "CDMX-CLIENT"
 )
 public interface RestClient {
-    @GetMapping("/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=50")
+    @GetMapping("/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e&limit=207")
     Template get();
 }
