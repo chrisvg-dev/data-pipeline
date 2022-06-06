@@ -66,6 +66,9 @@ public class RecursosService {
     public void persist(Template template) {
         Thread.sleep(1000);
         long time = System.currentTimeMillis();
+        /**
+         * En este punto de la aplicación se realiza una iteración en los datos recibidos de la API de la ciudad de México para limpiarlos
+         */
         log.info("START: COMIENZA LA DESCARGA DE LOS DATOS...");
             List<Informacion> data = template.getResult().getRecords().stream()
                 .filter( record ->
@@ -77,10 +80,14 @@ public class RecursosService {
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
+
+                    /**
+                     * Cuando se llega a este punto, se manda una petición a Google para obtener la alcaldia correspondiente a las coordenadas
+                     */
                     GoogleMaps gm = this.obtenerAlcaldia(record.getPosition_latitude(), record.getPosition_longitude());
                     Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(gm);
                     info.setAlcaldia(alcaldia);
-                    return info;
+                    return info; // Retorna el objeto con la alcaldia
                 }).collect(Collectors.toList());
             this.recordRepository.saveAll(data);
         log.info("END: TERMINA LA DESCARGA DE LOS DATOS...");
