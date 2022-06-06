@@ -136,10 +136,10 @@ public class RecursosService {
              *
              */
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name().toUpperCase();
-            boolean existe = alcaldiaRepository.existsByName(name);
-            log.info( existe + ": " + name );
+            boolean exist = alcaldiaRepository.existsByName(name);
+            log.info( exist + ": " + name );
             Alcaldia alc =  null;
-            if (!existe) {
+            if (!exist) {
                 alc = new Alcaldia(0, name);
                 this.alcaldiaRepository.save(alc);
             }
