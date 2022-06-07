@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 /**
  * Permite al usuario realizar las peticiones para obtener la información recolectada del API de la ciudad de México
  * y del API de Google
@@ -35,7 +34,7 @@ public class GraphQLController {
     }
 
     /** ---------------------------------------------------------------------------------------------------------
-     * NUEVA API -> SE AGREGÓ DESPUÉS DE LA ENTREGA. No se consumen desde el cliente pero son funcionales.
+     * NUEVA API -> APIS PARA CONSUMIR LA INFORMACIÓN
      */
     @GetMapping("/all")
     public ResponseEntity<Object> obtenerTodos() {
