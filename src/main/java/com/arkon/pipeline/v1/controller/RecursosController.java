@@ -29,6 +29,10 @@ public class RecursosController {
      * en el frontend.
      *
      * TIEMPO APROXIMADO DE EJECUCIÓN: 40 SEGS
+     * Necesitas acceder a: http://URL/api/pipeline/recolectar
+     * URL depende de la forma del despliegue:
+     * Docker -> localhost:9090
+     * Kubernetes -> IP_MINIKUBE:PUERTO
      * @return
      */
     @GetMapping("/recolectar")
