@@ -33,4 +33,42 @@ public class GraphQLController {
         ExecutionResult result = graphQL.execute(query);
         return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
+
+    /** ---------------------------------------------------------------------------------------------------------
+     * NUEVA API -> SE AGREGÓ DESPUÉS DE LA ENTREGA. No se consumen desde el cliente pero son funcionales.
+     */
+    @GetMapping("/all")
+    public ResponseEntity<Object> obtenerTodos() {
+        String query = "{ records { idVehiculo statusVehiculo longitud latitud alcaldia { name } } }";
+        log.info(query);
+        return get(query);
+    }
+    @GetMapping("/alcaldiasDisponibles")
+    public ResponseEntity<Object> alcaldiasDisponibles() {
+        String query = "{ alcaldiasDisponibles { name } }";
+        return get(query);
+    }
+    @GetMapping("/unidadesDisponibles")
+    public ResponseEntity<Object> unidadesDisponibles() {
+        String query = "{ unidadesDisponibles { idVehiculo statusVehiculo longitud latitud alcaldia { name } } }";
+        return get(query);
+    }
+    @GetMapping("/vehiculos/{id}")
+    public ResponseEntity<Object> buscarPorId(@PathVariable Integer id) {
+        String query = "{ buscarPorId(idVehiculo:"+id+") { idVehiculo statusVehiculo longitud latitud alcaldia { name } } }";
+        return get(query);
+    }
+    @GetMapping("/alcaldias/{name}")
+    public ResponseEntity<Object> buscarUnidadesPorAlcaldia(@PathVariable String name) {
+        String query = "{ buscarPorAlcaldia(alcaldia:"+name+") { idVehiculo statusVehiculo longitud latitud alcaldia { name } } }";
+        return get(query);
+    }
+
+    public ResponseEntity<Object> get(String query) {
+        ExecutionResult result = graphQL.execute(query);
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
+    }
+    /**
+     * -------------------------------------------------------------------------------------------------------------------------------
+     */
 }
