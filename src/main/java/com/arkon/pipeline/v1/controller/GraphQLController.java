@@ -93,7 +93,7 @@ public class GraphQLController {
      */
     public ResponseEntity<Object> get(String query) {
         ExecutionResult result = graphQL.execute(query);
-        return new ResponseEntity<Object>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
     /**
      * -------------------------------------------------------------------------------------------------------------------------------

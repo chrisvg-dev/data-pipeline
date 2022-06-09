@@ -67,21 +67,11 @@ public class GraphQLProvider {
      * @return
      */
     private RuntimeWiring buildWiring() {
-        DataFetcher<List<Informacion>> records = data -> {
-            return (List<Informacion>) queryResolver.records();
-        };
-        DataFetcher<List<Alcaldia>> alcaldias = data -> {
-            return (List<Alcaldia>) queryResolver.alcaldiasDisponibles();
-        };
-        DataFetcher<List<Informacion>> unidadesDisponibles = data -> {
-            return (List<Informacion>) queryResolver.unidadesDisponibles();
-        };
-        DataFetcher<Informacion> buscarPorId = data -> {
-            return (Informacion) queryResolver.buscarPorId(data.getArgument("idVehiculo"));
-        };
-        DataFetcher<List<Informacion>> buscarPorAlcaldia = data -> {
-            return (List<Informacion>) queryResolver.buscarPorAlcaldia(data.getArgument("alcaldia"));
-        };
+        DataFetcher<List<Informacion>> records = data -> queryResolver.records();
+        DataFetcher<List<Alcaldia>> alcaldias = data -> queryResolver.alcaldiasDisponibles();
+        DataFetcher<List<Informacion>> unidadesDisponibles = data -> queryResolver.unidadesDisponibles();
+        DataFetcher<Informacion> buscarPorId = data -> queryResolver.buscarPorId(data.getArgument("idVehiculo"));
+        DataFetcher<List<Informacion>> buscarPorAlcaldia = data -> queryResolver.buscarPorAlcaldia(data.getArgument("alcaldia"));
 
         return RuntimeWiring.newRuntimeWiring().type("Query",
                         typeWriting ->

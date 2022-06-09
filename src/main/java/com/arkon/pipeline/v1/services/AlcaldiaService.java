@@ -33,8 +33,5 @@ public class AlcaldiaService {
     public Alcaldia buscarPorNombre(String nombre) {
         return this.alcaldiaRepository.findByName(nombre);
     }
-    public Boolean Reactivo_buscarPorNombre(String nombre) {
-       // return this.alcaldiaReactiveRepository.existsByName(nombre).block();
-        return false;
-    }
+
 }

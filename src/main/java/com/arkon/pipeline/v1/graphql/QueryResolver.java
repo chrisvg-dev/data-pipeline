@@ -2,19 +2,13 @@ package com.arkon.pipeline.v1.graphql;
 
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
-import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
-import com.arkon.pipeline.v1.repository.InformationRepository;
 import com.arkon.pipeline.v1.services.AlcaldiaService;
 import com.arkon.pipeline.v1.services.InformacionService;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 /**
@@ -24,7 +18,7 @@ import java.util.List;
  */
 @Component
 public class QueryResolver implements GraphQLQueryResolver {
-    public static final Logger log = LoggerFactory.getLogger(Data.class);
+    public static final Logger log = LoggerFactory.getLogger(QueryResolver.class);
     /**
      * Inyección de repositorios para poder hacer uso de ellos dentro de QueryResolver
      */

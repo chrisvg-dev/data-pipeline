@@ -24,8 +24,8 @@ public class AlcaldiaServiceTest {
 
     @Test
     public void contextLoads(){
-        Alcaldia a = new Alcaldia(1, "MEXICO");
-        Alcaldia d = new Alcaldia(4, "BENITO JUAREZ");
+        Alcaldia a = new Alcaldia("MX", "MEXICO");
+        Alcaldia d = new Alcaldia("BN", "BENITO JUAREZ");
         when(alcaldiaRepository.findByName("BENITO JUAREZ")).thenReturn(d);
         when(alcaldiaRepository.findByName("MEXICO")).thenReturn(a);
         Alcaldia alc = this.alcaldiaService.buscarPorNombre("MEXICO");
@@ -36,14 +36,14 @@ public class AlcaldiaServiceTest {
 
     @Test
     public void findAll_returnList(){
-        Alcaldia a = new Alcaldia(1, "MEXICO");
-        Alcaldia b = new Alcaldia(2, "CUAUHTEMOC");
-        Alcaldia c = new Alcaldia(3, "IZTAPALAPA");
-        Alcaldia d = new Alcaldia(4, "BENITO JUAREZ");
+        Alcaldia a = new Alcaldia("MX", "MEXICO");
+        Alcaldia b = new Alcaldia("CUA", "CUAUHTEMOC");
+        Alcaldia c = new Alcaldia("IZTA", "IZTAPALAPA");
+        Alcaldia d = new Alcaldia("BN", "BENITO JUAREZ");
         this.alcaldias = Arrays.asList( a,b,c,d );
         when(alcaldiaRepository.findAll()).thenReturn(this.alcaldias);
         List<Alcaldia> lista = this.alcaldiaService.buscarTodas();
         assertFalse(lista.isEmpty());
-        assertEquals(lista.size(), 4);
+        assertEquals(4, lista.size());
     }
 }

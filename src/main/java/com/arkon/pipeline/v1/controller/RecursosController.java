@@ -36,18 +36,24 @@ public class RecursosController {
      * @return
      */
     @GetMapping("/recolectar")
-    public boolean collect() {
+    public String collect() {
         try {
             /**
              * Template almacena la información mediante la implementación del patrón de diseño DTO,
              * mapea toda la información del JSON mediante clases.
              */
-            Template template = this.dataServices.reset();
-            this.dataServices.persist(template);
-            return true;
+
+            if (this.dataServices.countAll() > 0) {
+
+                return "No hace falta descargar, su base de datos ya tiene la información";
+            }
+            this.dataServices.persist();
+            return "Toda la información ha sido descargada";
+
+
         }catch (Exception e)  {
-            log.error( "Error a la hora de recolectar: " + e.getMessage() );
-            return false;
+            log.error( String.format("Error a la hora de recolectar: %s ", e.getMessage() ) );
+            return e.getMessage();
         }
     }
 }

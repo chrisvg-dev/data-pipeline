@@ -1,8 +1,5 @@
 package com.arkon.pipeline.v1;
 
-import com.arkon.pipeline.v1.repository.AlcaldiaRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -18,13 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableFeignClients // Habilita las peticiones a API con Feign
 @EnableAsync // Habilita el trabajo asíncrono para algunas funcionalidades
 public class V1Application {
-	private static final Logger log = LoggerFactory.getLogger(V1Application.class);
-
-	private final AlcaldiaRepository alcaldiaRepository;
-
-	public V1Application(AlcaldiaRepository alcaldiaRepository) {
-		this.alcaldiaRepository = alcaldiaRepository;
-	}
 
 	@Bean
 	public RestTemplate restTemplate(){

@@ -3,6 +3,7 @@ package com.arkon.pipeline.v1.repository;
 import com.arkon.pipeline.v1.model.Alcaldia;
 import com.arkon.pipeline.v1.model.Informacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
@@ -36,4 +37,7 @@ public interface InformationRepository extends JpaRepository<Informacion, Intege
      * @return
      */
     List<Informacion> findByAlcaldia(Alcaldia alcaldia);
+
+    @Query("SELECT count(i) FROM Informacion i")
+    Integer countAll();
 }

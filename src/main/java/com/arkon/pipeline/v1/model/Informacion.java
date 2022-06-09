@@ -3,7 +3,6 @@ package com.arkon.pipeline.v1.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * La clase Información es la forma final de representación de los datos, los cuales necesitan ser limpiados
@@ -18,8 +17,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Informacion implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Informacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,7 +26,7 @@ public class Informacion implements Serializable {
      * Se relaciona el campo alcaldia de la tabla información con la llave primaria de la tabla alcaldia
      */
     @ManyToOne
-    @JoinColumn(name = "alcaldiaId", referencedColumnName = "id")
+    @JoinColumn(name = "alcaldiaCode", referencedColumnName = "id")
     private Alcaldia alcaldia;
 
     private Double latitud;

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Esta clase representa a las alcaldias que serán recibidas desde Google Maps durante el proceso de recolección
@@ -15,10 +14,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Alcaldia implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Alcaldia {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
     private String name;
 }

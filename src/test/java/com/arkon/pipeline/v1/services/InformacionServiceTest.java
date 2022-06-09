@@ -28,10 +28,10 @@ public class InformacionServiceTest {
 
     @Before
     public void setup(){
-        this.a = new Alcaldia(1, "MEXICO");
-        this.b = new Alcaldia(2, "CUAUHTEMOC");
-        this.c = new Alcaldia(3, "IZTAPALAPA");
-        this.d = new Alcaldia(4, "BENITO JUAREZ");
+        this.a = new Alcaldia("MX", "MEXICO");
+        this.b = new Alcaldia("CUA", "CUAUHTEMOC");
+        this.c = new Alcaldia("IZTA", "IZTAPALAPA");
+        this.d = new Alcaldia("BN", "BENITO JUAREZ");
         this.info1 = new Informacion(1, a, 10.99,-20.99, 100, true);
         this.info2 = new Informacion(2, b, 10.99,-20.99, 100, false);
         this.info3 = new Informacion(3, c, 10.99,-20.99, 100, true);
@@ -41,14 +41,10 @@ public class InformacionServiceTest {
     }
 
     @Test
-    public void contextLoads(){
-    }
-
-    @Test
     public void buscarTodos() {
         when(this.repository.findAll()).thenReturn(lista);
         List<Informacion> datos = this.service.buscarTodos();
-        assertEquals(datos.size(), 4);
+        assertEquals(4,datos.size());
     }
 
     @Test
@@ -56,14 +52,14 @@ public class InformacionServiceTest {
         List<Informacion> disponibles = Arrays.asList(info1, info3);
         when(this.repository.findByStatusVehiculo(true)).thenReturn(disponibles);
         List<Informacion> datos = this.service.unidadesDisponibles();
-        assertEquals(datos.size(), 2);
+        assertEquals(2, datos.size());
     }
 
     @Test
     public void buscarPorId() {
         when(repository.findByIdVehiculo(1)).thenReturn(info1);
         Informacion dato = service.buscarPorId(1);
-        assertEquals(dato.getStatusVehiculo(), true);
+        assertEquals(true, dato.getStatusVehiculo());
         assertNotNull(dato);
     }
 
@@ -73,7 +69,7 @@ public class InformacionServiceTest {
         Informacion info2 = new Informacion(2, a, 10.99,-20.99, 100, false);
         List<Informacion> lista = Arrays.asList(info1, info2);
         when(repository.findByAlcaldia(a)).thenReturn(lista);
-        assertEquals(lista.size(), 2);
+        assertEquals(2, lista.size());
         assertNotNull(lista);
     }
 }
