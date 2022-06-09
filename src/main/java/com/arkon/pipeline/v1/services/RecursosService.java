@@ -67,7 +67,6 @@ public class RecursosService {
     public void persist() {
         this.reset();
         try {
-            Thread.sleep(1000);
             Set<Alcaldia> alcaldias = new HashSet<>();
             /**
              * En este punto de la aplicación se realiza una iteración en los datos recibidos de la API de la ciudad de México para limpiarlos
@@ -92,8 +91,10 @@ public class RecursosService {
                         alcaldias.add(alcaldia);
                         return info; // Retorna el objeto con la alcaldia
                     }).collect(Collectors.toList());
+
             this.alcaldiaRepository.saveAll(alcaldias);
             this.recordRepository.saveAll(data);
+
             log.info("END: TERMINA LA DESCARGA DE LOS DATOS...");
         } catch (Exception e){
             log.error( e.getMessage() );

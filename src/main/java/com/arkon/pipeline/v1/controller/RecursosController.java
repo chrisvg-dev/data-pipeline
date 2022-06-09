@@ -1,6 +1,5 @@
 package com.arkon.pipeline.v1.controller;
 
-import com.arkon.pipeline.v1.dto.cdmx.Template;
 import com.arkon.pipeline.v1.services.RecursosService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
