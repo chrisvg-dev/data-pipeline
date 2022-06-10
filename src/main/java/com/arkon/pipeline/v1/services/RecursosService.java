@@ -63,7 +63,6 @@ public class RecursosService {
      * acceder a la alcaldia.
      *
      */
-
     public void persist() {
         this.reset();
         try {
@@ -88,6 +87,7 @@ public class RecursosService {
                         GoogleMaps gm = this.buscarUbicacionMaps(item.getPosition_latitude(), item.getPosition_longitude());
                         Alcaldia alcaldia = this.extraerAlcaldiaMaps(gm);
                         info.setAlcaldia(alcaldia);
+
                         alcaldias.add(alcaldia);
                         return info; // Retorna el objeto con la alcaldia
                     }).collect(Collectors.toList());
@@ -137,7 +137,6 @@ public class RecursosService {
             return null;
         }
     }
-
     /**
      * ADVERTENCIA...
      * Este método se utiliza únicamente cuando se quiere volver a obtener la información de los orígenes remotos.
@@ -151,7 +150,6 @@ public class RecursosService {
          */
         return this.restClient.get();
     }
-
     public void reset() {
         /**
          * WARNING

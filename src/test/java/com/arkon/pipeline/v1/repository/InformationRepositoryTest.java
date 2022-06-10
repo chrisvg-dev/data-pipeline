@@ -35,9 +35,9 @@ public class InformationRepositoryTest {
 
     @Before
     public void setup(){
-        this.a = new Alcaldia(1, "MEXICO");
-        this.c = new Alcaldia(3, "IZTAPALAPA");
-        this.d = new Alcaldia(4, "BENITO JUAREZ");
+        this.a = new Alcaldia("MX", "MEXICO");
+        this.c = new Alcaldia("IZT", "IZTAPALAPA");
+        this.d = new Alcaldia("BN", "BENITO JUAREZ");
         this.info1 = new Informacion(1, a, 10.99,-20.99, 100, true);
         this.info2 = new Informacion(2, a, 10.99,-20.99, 100, false);
         this.info3 = new Informacion(3, c, 10.99,-20.99, 100, true);

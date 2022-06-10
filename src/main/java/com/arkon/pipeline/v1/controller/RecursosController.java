@@ -1,8 +1,10 @@
 package com.arkon.pipeline.v1.controller;
 
+import com.arkon.pipeline.v1.dto.ResponseDto;
 import com.arkon.pipeline.v1.services.RecursosService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,7 +29,7 @@ public class RecursosController {
      * Si hay un error a la hora de recolectar se retorna un false, lo cual se utiliza para validar la información
      * en el frontend.
      *
-     * TIEMPO APROXIMADO DE EJECUCIÓN: 40 SEGS
+     * TIEMPO APROXIMADO DE EJECUCIÓN: 7 SEGS
      * Necesitas acceder a: http://URL/api/pipeline/recolectar
      * URL depende de la forma del despliegue:
      * Docker -> localhost:9090
@@ -35,24 +37,22 @@ public class RecursosController {
      * @return
      */
     @GetMapping("/recolectar")
-    public String collect() {
+    public ResponseEntity<ResponseDto> collect() {
         try {
             /**
              * Template almacena la información mediante la implementación del patrón de diseño DTO,
              * mapea toda la información del JSON mediante clases.
              */
 
-            if (this.dataServices.countAll() > 0) {
-
-                return "No hace falta descargar, su base de datos ya tiene la información";
+            if (this.dataServices.countAll() > 200) {
+                return ResponseEntity.ok( new ResponseDto(true, "No hace falta descargar, su base de datos ya tiene la información") );
             }
             this.dataServices.persist();
-            return "Toda la información ha sido descargada";
+            return ResponseEntity.ok( new ResponseDto(true, "Toda la información ha sido descargada") );
 
 
         }catch (Exception e)  {
-            log.error( String.format("Error a la hora de recolectar: %s ", e.getMessage() ) );
-            return e.getMessage();
+            return ResponseEntity.ok( new ResponseDto(false, String.format("Error a la hora de recolectar: %s ", e.getMessage() ) ) );
         }
     }
 }
