@@ -66,6 +66,9 @@ public class RecursosService {
     public void persist(Template template) {
         Thread.sleep(1000);
         long time = System.currentTimeMillis();
+        /**
+         * En este punto de la aplicación se realiza una iteración en los datos recibidos de la API de la ciudad de México para limpiarlos
+         */
         log.info("START: COMIENZA LA DESCARGA DE LOS DATOS...");
             List<Informacion> data = template.getResult().getRecords().stream()
                 .filter( record ->
@@ -77,10 +80,14 @@ public class RecursosService {
                     info.setLatitud( record.getPosition_latitude() );
                     info.setLongitud( record.getPosition_longitude() );
                     info.setStatusVehiculo( record.getVehicle_current_status() == 1 );
+
+                    /**
+                     * Cuando se llega a este punto, se manda una petición a Google para obtener la alcaldia correspondiente a las coordenadas
+                     */
                     GoogleMaps gm = this.obtenerAlcaldia(record.getPosition_latitude(), record.getPosition_longitude());
                     Alcaldia alcaldia = this.buscarAlcaldiaPorCoordenadas(gm);
                     info.setAlcaldia(alcaldia);
-                    return info;
+                    return info; // Retorna el objeto con la alcaldia
                 }).collect(Collectors.toList());
             this.recordRepository.saveAll(data);
         log.info("END: TERMINA LA DESCARGA DE LOS DATOS...");
@@ -92,7 +99,7 @@ public class RecursosService {
      */
 
     /**
-     * Este método permite conectarse a la API de Google y descarga el JSON con la información de la ubicación con
+     * Este método permite conectarse a la API de Google y descargar el JSON con la información de la ubicación con
      * base en la latitud y longitud proporcionada.
      * Retorna un DTO de GoogleMaps, que se puede encontrar en la carpeta DTO.
      * @param lat
@@ -118,7 +125,7 @@ public class RecursosService {
         int len = gm.getResults().size();
         try {
             /** IMPORTANTE
-             * Google retorna demasiada información con basándose en las coordenadas proporcionadas, la información de
+             * Google retorna demasiada información basándose en las coordenadas proporcionadas, la información de
              * las alcaldias puede ser fácilmente encontrada ubicando la siguiente secuencia:
              * JSON completo
              *      - results
@@ -129,11 +136,16 @@ public class RecursosService {
              *
              */
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name().toUpperCase();
+<<<<<<< HEAD
             //boolean existe = alcaldiaRepository.existsByName(name);
             boolean existe = alcaldiaRepository.existsByName(name).get();
             log.info( existe + ": " + name );
+=======
+            boolean exist = alcaldiaRepository.existsByName(name);
+            log.info( exist + ": " + name );
+>>>>>>> 1c48ae94557a489f08bacc52a7373becd9462946
             Alcaldia alc =  null;
-            if (!existe) {
+            if (!exist) {
                 alc = new Alcaldia(0, name);
                 this.alcaldiaRepository.save(alc);
             }
