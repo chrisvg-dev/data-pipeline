@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.crypto.Data;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
+
 /**
  * Servicio que agrupa todas las funcionalidades que tienen relación con la obtención de la información que proviene
  * de origenes remotos. Este servicio solo se invoca una vez, cuando se necesita llenar la base de datos.
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class RecursosService {
-    public static final Logger log = LoggerFactory.getLogger(Data.class);
+    public static final Logger log = LoggerFactory.getLogger(RecursosService.class);
     /**
      * URL de la API de Google, de aquí se obtienen los datos de las alcaldias
      */
@@ -136,14 +136,14 @@ public class RecursosService {
              *
              */
             String name = gm.getResults().get(len-4).getAddress_components().get(0).getLong_name().toUpperCase();
-<<<<<<< HEAD
+
             //boolean existe = alcaldiaRepository.existsByName(name);
-            boolean existe = alcaldiaRepository.existsByName(name).get();
-            log.info( existe + ": " + name );
-=======
-            boolean exist = alcaldiaRepository.existsByName(name);
+            //boolean existe = alcaldiaRepository.existsByName(name).get();
+            //log.info( existe + ": " + name );
+
+            boolean exist = alcaldiaRepository.existsByName(name).get();
             log.info( exist + ": " + name );
->>>>>>> 1c48ae94557a489f08bacc52a7373becd9462946
+
             Alcaldia alc =  null;
             if (!exist) {
                 alc = new Alcaldia(0, name);
